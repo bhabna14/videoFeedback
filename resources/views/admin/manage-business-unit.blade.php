@@ -9,6 +9,8 @@
     <!-- INTERNAL Select2 css -->
     <link href="{{ asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet" />
 @endsection
+
+
 @section('content')
     <!-- breadcrumb -->
     <div class="breadcrumb-header justify-content-between">
