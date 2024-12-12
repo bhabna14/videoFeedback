@@ -13,7 +13,7 @@
         </div>
         <div class="justify-content-center mt-2">
             <ol class="breadcrumb d-flex justify-content-between align-items-center">
-                <li class="breadcrumb-item tx-15"><a href="{{ url('admin/manage-product') }}"
+                <li class="breadcrumb-item tx-15"><a href="{{ route('manageBusinessUnit') }}"
                         class="btn btn-warning text-dark">Manage Business Unit</a></li>
                 <li class="breadcrumb-item tx-15"><a href="javascript:void(0);">Dashboard</a></li>
                 <li class="breadcrumb-item active tx-15" aria-current="page">Unit</li>
@@ -141,7 +141,7 @@
                 <button type="submit" class="btn btn-primary w-100">Submit</button>
             </div>
         </div>
-        
+    
     </form>
 @endsection
 

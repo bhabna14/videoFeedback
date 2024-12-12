@@ -47,6 +47,8 @@ class BusinessUnitController extends Controller
                 $businessLogo = $request->file('business_logo');
                 $businessLogoPath = $businessLogo->store('uploads/business_logos', 'public');
             }
+
+            
             $business_id = Auth::guard('admins')->user()->business_id;
             
             $business_unit_id = 'BUSINESS_UNIT' . rand(100000, 999999);
@@ -80,5 +82,91 @@ class BusinessUnitController extends Controller
             return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
+
+    public function manageBusinessUnit()
+    {
+        // Fetch all business units from the database
+        $businessUnits = BusinessUnit::where('status','active')->get();
+
+        // Return the view and pass the business units to it
+        return view('admin/manage-business-unit', compact('businessUnits'));
+    }
     
+
+public function deleteBusinessUnit(Request $request, $id)
+{
+    try {
+        $businessUnit = BusinessUnit::findOrFail($id);
+        $businessUnit->status = 'deleted';
+        $businessUnit->save();
+
+        return redirect()->back()->with('success', 'Business unit marked as deleted successfully!');
+    } catch (\Exception $e) {
+        \Log::error('Error deleting business unit: ' . $e->getMessage());
+
+        return redirect()->back()->with('error', 'An error occurred while deleting the business unit.');
+    }
+}
+
+public function editBusinessUnit($id)
+{
+    $businessUnit = BusinessUnit::findOrFail($id); // Fetch the specific business unit
+
+    return view('admin.edit-business-unit', compact('businessUnit'));
+}
+
+public function updateBusinessUnit(Request $request, $id)
+{
+    $request->validate([
+        'business_unit_name' => 'required|string|max:255',
+        'business_logo' => 'nullable|image|mimes:jpeg,png,jpg|max:4096',
+        'mobile_number' => 'nullable|numeric',
+        'whatsapp_number' => 'nullable|numeric',
+        'user_name' => 'nullable|string|max:255',
+        'password' => 'nullable|string|max:255',
+        'locality' => 'nullable|string|max:255',
+        'pincode' => 'nullable|numeric',
+        'city' => 'nullable|string|max:255',
+        'town' => 'nullable|string|max:255',
+        'state' => 'nullable|string|max:255',
+        'country' => 'nullable|string|max:255',
+        'full_address' => 'nullable|string',
+    ]);
+
+    try {
+        $businessUnit = BusinessUnit::findOrFail($id);
+        $businessUnit->business_unit_name = $request->business_unit_name;
+
+        if ($request->hasFile('business_logo')) {
+            $businessLogo = $request->file('business_logo');
+            $businessLogoPath = $businessLogo->store('uploads/business_logos', 'public');
+            $businessUnit->business_logo = $businessLogoPath;
+        }
+        
+
+        $businessUnit->mobile_number = $request->mobile_number;
+        $businessUnit->whatsapp_number = $request->whatsapp_number;
+        $businessUnit->user_name = $request->user_name;
+
+        if ($request->filled('password')) {
+            $businessUnit->password = bcrypt($request->password); // Remember to hash the password before saving
+        }
+        
+        $businessUnit->locality = $request->locality;
+        $businessUnit->pincode = $request->pincode;
+        $businessUnit->city = $request->city;
+        $businessUnit->town = $request->town;
+        $businessUnit->state = $request->state;
+        $businessUnit->country = $request->country;
+        $businessUnit->full_address = $request->full_address;
+
+        $businessUnit->save();
+
+        return redirect()->route('manageBusinessUnit')->with('success', 'Business Unit updated successfully!');
+    } catch (\Exception $e) {
+        \Log::error('Error updating business unit: ' . $e->getMessage());
+        return back()->withErrors(['danger' => 'An error occurred while updating the business unit.']);
+    }
+}
+
 }

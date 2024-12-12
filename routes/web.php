@@ -23,9 +23,12 @@ Route::prefix('admin')->middleware('auth:admins')->group(function () {
     Route::get('/dash-board', [AdminController::class, 'showDashboard'])->name('admin.dashboard');
     
     Route::controller(BusinessUnitController::class)->group(function() {
-
         Route::get('/add-business-unit', 'showBusinessUnit')->name('addBusinessUnit');
         Route::post('/save-business-unit','saveBusinessUnit')->name('admin.save-business-unit');
+        Route::get('/manage-business-unit', 'manageBusinessUnit')->name('manageBusinessUnit');
+        Route::post('/delete-business-unit/{id}',  'deleteBusinessUnit')->name('admin.deleteBusinessUnit');
+        Route::get('/edit-business-unit/{id}', 'editBusinessUnit')->name('admin.edit-business-unit');
+        Route::put('/update-business-unit/{id}', 'updateBusinessUnit')->name('admin.update-business-unit');
 
     });
 
