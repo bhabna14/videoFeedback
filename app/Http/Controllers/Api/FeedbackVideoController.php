@@ -12,9 +12,7 @@ class FeedbackVideoController extends Controller
     public function saveFeedbackVideo(Request $request)
     {
         try {
-            $request->validate([
-                'feedback_video' => 'required|mimes:mp4,mov,avi,wmv',
-            ]);
+           
     
             if ($request->hasFile('feedback_video')) {
                 $video = $request->file('feedback_video');
