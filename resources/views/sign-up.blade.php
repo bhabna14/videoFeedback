@@ -72,7 +72,7 @@
                                         </form>
         
                                         <div class="main-signup-footer mt-3 text-center">
-                                            <p>Already have an account? <a href="{{url('/business-login')}}">Log In</a></p>
+                                            <p>Already have an account? <a href="{{url('admin/business-login')}}">Log In</a></p>
                                         </div>
                                     </div>
                                 </div>
