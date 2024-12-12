@@ -15,7 +15,7 @@
     <!-- breadcrumb -->
     <div class="breadcrumb-header justify-content-between">
         <div class="left-content">
-            <span class="main-content-title mg-b-0 mg-b-lg-1">MANAGE BUSINESS UNIT</span>
+            <span class="main-content-title mg-b-0 mg-b-lg-1">MANAGE BUSINESS UNIT 2</span>
         </div>
         <div class="justify-content-center mt-2">
             <ol class="breadcrumb d-flex justify-content-between align-items-center">
