@@ -29,9 +29,7 @@ Route::prefix('admin')->middleware('auth:admins')->group(function () {
         Route::post('/delete-business-unit/{id}',  'deleteBusinessUnit')->name('admin.deleteBusinessUnit');
         Route::get('/edit-business-unit/{id}', 'editBusinessUnit')->name('admin.edit-business-unit');
         Route::put('/update-business-unit/{id}', 'updateBusinessUnit')->name('admin.update-business-unit');
-
     });
-
 });
 
 Route::get('/sign-up', [SuperAdminController::class, 'businessRegister'])->name('businessRegister');
