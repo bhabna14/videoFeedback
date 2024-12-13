@@ -170,7 +170,7 @@
                                     <th>Video</th>
                                     <th>Rating</th>
                                     <th>Comments</th>
-                                    {{-- <th>Social Media</th> --}}
+                                    <th>Social Media</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -206,34 +206,27 @@
                                                 <button type="submit" class="btn btn-sm btn-success mt-2">Save</button>
                                             </form>
                                         </td>
-                                        {{-- <td>
-                                            @foreach($video->businessUnit->socialMedia as $socialMedia)
-                                                <a href="{{ $socialMedia->social_media_link }}" target="_blank" class="social-media-icon" style="font-size: 24px; margin-right: 5px;">
-                                                    @switch(strtolower($socialMedia->social_media_name))
-                                                        @case('youtube')
-                                                            <i class="fab fa-youtube" style="color: #FF0000;"></i>  <!-- YouTube Red -->
-                                                            @break
-                                                        @case('twitter')
-                                                            <i class="fab fa-twitter" style="color: #1DA1F2;"></i>  <!-- Twitter Blue -->
-                                                            @break
-                                                        @case('facebook')
-                                                            <i class="fab fa-facebook" style="color: #3b5998;"></i>  <!-- Facebook Blue -->
-                                                            @break
-                                                        @case('instagram')
-                                                            <i class="fab fa-instagram" style="color: #E4405F;"></i>  <!-- Instagram Pink -->
-                                                            @break
-                                                        @case('whatsapp')
-                                                            <i class="fab fa-whatsapp" style="color: #25D366;"></i>  <!-- WhatsApp Green -->
-                                                            @break
-                                                        @case('linkedin')
-                                                            <i class="fab fa-linkedin" style="color: #0077b5;"></i>  <!-- LinkedIn Blue -->
-                                                            @break
-                                                        @default
-                                                            <i class="fab fa-share-alt" style="color: #6c757d;"></i>  <!-- Default Grey -->
-                                                    @endswitch
-                                                </a>
-                                            @endforeach
-                                        </td> --}}
+                                        <td>
+                                            <a href="https://www.youtube.com" target="_blank" class="social-media-icon" style="font-size: 24px; margin-right: 5px;">
+                                                <i class="fab fa-youtube" style="color: #FF0000;"></i> <!-- YouTube Red -->
+                                            </a>
+                                            <a href="https://www.twitter.com" target="_blank" class="social-media-icon" style="font-size: 24px; margin-right: 5px;">
+                                                <i class="fab fa-twitter" style="color: #1DA1F2;"></i> <!-- Twitter Blue -->
+                                            </a>
+                                            <a href="https://www.facebook.com" target="_blank" class="social-media-icon" style="font-size: 24px; margin-right: 5px;">
+                                                <i class="fab fa-facebook" style="color: #3b5998;"></i> <!-- Facebook Blue -->
+                                            </a>
+                                            <a href="https://www.instagram.com" target="_blank" class="social-media-icon" style="font-size: 24px; margin-right: 5px;">
+                                                <i class="fab fa-instagram" style="color: #E4405F;"></i> <!-- Instagram Pink -->
+                                            </a>
+                                            <a href="https://www.whatsapp.com" target="_blank" class="social-media-icon" style="font-size: 24px; margin-right: 5px;">
+                                                <i class="fab fa-whatsapp" style="color: #25D366;"></i> <!-- WhatsApp Green -->
+                                            </a>
+                                            <a href="https://www.linkedin.com" target="_blank" class="social-media-icon" style="font-size: 24px; margin-right: 5px;">
+                                                <i class="fab fa-linkedin" style="color: #0077b5;"></i> <!-- LinkedIn Blue -->
+                                            </a>
+                                        </td>
+                                        
                                         
                                         <td class="d-flex justify-content-start">
                                             <!-- Disable Video -->

@@ -25,6 +25,7 @@ class FeedbackVideoController extends Controller
  
                 $feedbackVideo = FeedbackVideo::create([
                     'feedback_video' => $videoUrl,
+                    
                 ]);
    
                 return response()->json([
