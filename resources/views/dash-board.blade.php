@@ -170,7 +170,7 @@
                                     <th>Video</th>
                                     <th>Rating</th>
                                     <th>Comments</th>
-                                    <th>Social Media</th>
+                                    {{-- <th>Social Media</th> --}}
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -206,7 +206,7 @@
                                                 <button type="submit" class="btn btn-sm btn-success mt-2">Save</button>
                                             </form>
                                         </td>
-                                        <td>
+                                        {{-- <td>
                                             @foreach($video->businessUnit->socialMedia as $socialMedia)
                                                 <a href="{{ $socialMedia->social_media_link }}" target="_blank" class="social-media-icon" style="font-size: 24px; margin-right: 5px;">
                                                     @switch(strtolower($socialMedia->social_media_name))
@@ -233,7 +233,7 @@
                                                     @endswitch
                                                 </a>
                                             @endforeach
-                                        </td>
+                                        </td> --}}
                                         
                                         <td class="d-flex justify-content-start">
                                             <!-- Disable Video -->
