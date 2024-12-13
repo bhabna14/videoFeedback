@@ -43,38 +43,66 @@ class AdminController extends Controller
         return redirect()->url('business-login');
     }
 
-    public function showDashboard(Request $request)
-    {
-        // $business_id = Auth::guard('admins')->user()->business_id;
+    // public function showDashboard(Request $request)
+    // {
+    //     // $business_id = Auth::guard('admins')->user()->business_id;
         
-        // $query = FeedbackVideo::where('status', 'active')
-        //     ->whereHas('businessUnit', function ($query) use ($business_id) {
-        //         $query->where('business_id', $business_id); // Filter feedback videos based on business_id
-        //     })
-        //     ->with('businessUnit');  // Eager loading the businessUnit relationship
-        $query = FeedbackVideo::where('status', 'active')->get();
-        // if ($request->filled('business_unit_id') && $request->business_unit_id !== 'All') {
-        //     $query->where('business_unit_id', $request->business_unit_id);
-        // }
+    //     // $query = FeedbackVideo::where('status', 'active')
+    //     //     ->whereHas('businessUnit', function ($query) use ($business_id) {
+    //     //         $query->where('business_id', $business_id); // Filter feedback videos based on business_id
+    //     //     })
+    //     //     ->with('businessUnit');  // Eager loading the businessUnit relationship
+    //     $query = FeedbackVideo::where('status', 'active')->get();
+    //     // if ($request->filled('business_unit_id') && $request->business_unit_id !== 'All') {
+    //     //     $query->where('business_unit_id', $request->business_unit_id);
+    //     // }
     
-        if ($request->filled('from_date')) {
-            $fromDate = Carbon::parse($request->from_date)->startOfDay();
-            $query->where('date', '>=', $fromDate);
-        }
+    //     if ($request->filled('from_date')) {
+    //         $fromDate = Carbon::parse($request->from_date)->startOfDay();
+    //         $query->where('date', '>=', $fromDate);
+    //     }
     
-        if ($request->filled('to_date')) {
-            $toDate = Carbon::parse($request->to_date)->endOfDay();
-            $query->where('date', '<=', $toDate);
-        }
+    //     if ($request->filled('to_date')) {
+    //         $toDate = Carbon::parse($request->to_date)->endOfDay();
+    //         $query->where('date', '<=', $toDate);
+    //     }
 
-        $feedback_video = $query->get(['id', 'feedback_video', 'date', 'time']); // Select necessary columns
+    //     $feedback_video = $query->get(['id', 'feedback_video', 'date', 'time']); // Select necessary columns
     
-        // $businessName = Auth::guard('admins')->user()->business_name ?? 'User';
+    //     $businessName = Auth::guard('admins')->user()->business_name ?? 'User';
     
-        // $businessUnits = BusinessUnit::where('business_id', $business_id)->get();
+    //     $businessUnits = BusinessUnit::where('business_id', $business_id)->get();
     
-        return view('dash-board', compact('feedback_video'));
+    //     return view('dash-board', compact('businessUnits','businessName'.'feedback_video'));
+    // }
+
+    public function showDashboard(Request $request)
+{
+    // Initial query to fetch active feedback videos
+    $query = FeedbackVideo::where('status', 'active');
+
+    // Apply filters if provided in the request
+    if ($request->filled('from_date')) {
+        $fromDate = Carbon::parse($request->from_date)->startOfDay();
+        $query->where('date', '>=', $fromDate);
     }
+
+    if ($request->filled('to_date')) {
+        $toDate = Carbon::parse($request->to_date)->endOfDay();
+        $query->where('date', '<=', $toDate);
+    }
+
+    // Fetch the filtered data
+    $feedback_videos = $query->get(['id', 'feedback_video', 'date', 'time']); // Select necessary columns
+
+    // Fetch all business units (no filtering by business_id)
+    $businessUnits = BusinessUnit::all();
+    $businessName = Auth::guard('admins')->user()->business_name ?? 'User';
+    
+    // Pass data to the view
+    return view('dash-board', compact('businessUnits', 'businessName','feedback_videos'));
+}
+
 
     public function disableVideoFeedback($id)
 {
