@@ -164,7 +164,7 @@
                             <thead class="table-primary">
                                 <tr>
                                     <th class="text-center">Sl No.</th>
-                                    <th>Business Unit Name</th>
+                                    {{-- <th>Business Unit Name</th> --}}
                                     <th>Date</th>
                                     <th>Time</th>
                                     <th>Video</th>
@@ -178,7 +178,7 @@
                                 @forelse ($feedback_video as $index => $video)
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
-                                        <td>{{ $video->businessUnit->business_unit_name }}</td>
+                                        {{-- <td>{{ $video->businessUnit->business_unit_name }}</td> --}}
                                         <td>{{ \Carbon\Carbon::parse($video->date)->format('d-m-Y') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($video->time)->format('h:i A') }}</td>
                                         <td>
