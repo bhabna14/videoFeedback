@@ -113,24 +113,39 @@ class AdminController extends Controller
     $feedbackVideo->save();
 
     // Optionally, return a response or redirect
-    return response()->json(['message' => 'Video disabled successfully']);
+    return redirect()->back()->with('message', 'Video disabled successfully');
+
 }
 
 public function deleteVideoFeedback($id)
 {
-    $feedbackVideo = FeedbackVideo::findOrFail($id);
+    try {
+        // Find the video feedback by ID
+        $feedbackVideo = FeedbackVideo::findOrFail($id);
 
-    // Delete video file from storage
-    $videoPath = public_path($feedbackVideo->feedback_video);
-    if (file_exists($videoPath)) {
-        unlink($videoPath); // Delete the file
+        // Define the path to the video file
+        $videoPath = public_path($feedbackVideo->feedback_video);
+
+        // Check if the file exists before attempting to delete
+        if (file_exists($videoPath)) {
+            if (unlink($videoPath)) { // Delete the file
+                \Log::info("Video file deleted: " . $videoPath);
+            } else {
+                \Log::warning("Failed to delete video file: " . $videoPath);
+            }
+        } else {
+            \Log::warning("Video file does not exist: " . $videoPath);
+        }
+
+        // Permanently delete the record from the database
+        $feedbackVideo->delete();
+
+        // Return success response
+        return redirect()->back()->with('message', 'Video deleted successfully');
+    } catch (\Exception $e) {
+        \Log::error("Error deleting video feedback: " . $e->getMessage());
+        return redirect()->back()->with('error', 'Error occurred while deleting the video');
     }
-
-    // Permanently delete the record from the database
-    $feedbackVideo->delete();
-
-    // Optionally, return a response or redirect
-    return response()->json(['message' => 'Video deleted successfully']);
 }
 
 public function saveComment(Request $request, $videoId)
