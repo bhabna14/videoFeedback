@@ -93,14 +93,14 @@ class AdminController extends Controller
     }
 
     // Fetch the filtered data
-    $feedback_videos = $query->get(['id', 'feedback_video', 'date', 'time']); // Select necessary columns
+    $feedback_video = $query->get(['id', 'feedback_video', 'date', 'time']); // Select necessary columns
 
     // Fetch all business units (no filtering by business_id)
     $businessUnits = BusinessUnit::all();
     $businessName = Auth::guard('admins')->user()->business_name ?? 'User';
     
     // Pass data to the view
-    return view('dash-board', compact('businessUnits', 'businessName','feedback_videos'));
+    return view('dash-board', compact('businessUnits', 'businessName','feedback_video'));
 }
 
 
