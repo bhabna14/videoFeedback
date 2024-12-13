@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\FeedbackVideo;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth;
+// use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class FeedbackVideoController extends Controller
@@ -23,7 +23,7 @@ class FeedbackVideoController extends Controller
                 $videoUrl = asset('storage/' . $videoPath);
     
                 // Retrieve the authenticated business unit
-                $business_unit_id = Auth::guard('sanctum')->user()->business_unit_id;
+                // $business_unit_id = Auth::guard('sanctum')->user()->business_unit_id;
     
                 // Get the current date and time
                 $currentDate = Carbon::now('Asia/Kolkata')->toDateString(); // Format: 'YYYY-MM-DD'
@@ -31,7 +31,7 @@ class FeedbackVideoController extends Controller
     
                 // Save feedback video
                 $feedbackVideo = FeedbackVideo::create([
-                    'business_unit_id' => $business_unit_id,
+                    // 'business_unit_id' => $business_unit_id,
                     'feedback_video' => $videoUrl,
                     'date' => $currentDate,
                     'time' => $currentTime,
