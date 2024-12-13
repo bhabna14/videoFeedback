@@ -8,9 +8,9 @@ use App\Http\Controllers\Admin\AdminController;
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('sign-up');
-});
+// Route::get('/', function () {
+//     return view('sign-up');
+// });
 
 Route::prefix('admin')->group(function () {
     Route::get('/business-login', [AdminController::class, 'showLoginForm'])->name('admin.login');
@@ -38,7 +38,7 @@ Route::prefix('admin')->middleware('auth:admins')->group(function () {
     });
 });
 
-Route::get('/sign-up', [SuperAdminController::class, 'businessRegister'])->name('businessRegister');
+Route::get('/', [SuperAdminController::class, 'businessRegister'])->name('businessRegister');
 
 Route::post('/save-business-register', [SuperAdminController::class, 'saveBusinessRegister'])->name('saveBusinessRegister');
 
