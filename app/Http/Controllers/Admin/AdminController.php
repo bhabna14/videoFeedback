@@ -123,8 +123,10 @@ public function deleteVideoFeedback($id)
         // Find the video feedback by ID
         $feedbackVideo = FeedbackVideo::findOrFail($id);
 
-        // Define the path to the video file
-        $videoPath = public_path($feedbackVideo->feedback_video);
+        // Extract the relative path from the URL
+        $videoUrl = $feedbackVideo->feedback_video;
+        $relativePath = str_replace(config('app.url') . '/storage/', 'storage/', $videoUrl); // Adjust if base URL changes
+        $videoPath = public_path($relativePath);
 
         // Check if the file exists before attempting to delete
         if (file_exists($videoPath)) {
@@ -147,6 +149,7 @@ public function deleteVideoFeedback($id)
         return redirect()->back()->with('error', 'Error occurred while deleting the video');
     }
 }
+
 
 public function saveComment(Request $request, $videoId)
 {
