@@ -45,17 +45,17 @@ class AdminController extends Controller
 
     public function showDashboard(Request $request)
     {
-        $business_id = Auth::guard('admins')->user()->business_id;
+        // $business_id = Auth::guard('admins')->user()->business_id;
         
-        $query = FeedbackVideo::where('status', 'active')
-            ->whereHas('businessUnit', function ($query) use ($business_id) {
-                $query->where('business_id', $business_id); // Filter feedback videos based on business_id
-            })
-            ->with('businessUnit');  // Eager loading the businessUnit relationship
-    
-        if ($request->filled('business_unit_id') && $request->business_unit_id !== 'All') {
-            $query->where('business_unit_id', $request->business_unit_id);
-        }
+        // $query = FeedbackVideo::where('status', 'active')
+        //     ->whereHas('businessUnit', function ($query) use ($business_id) {
+        //         $query->where('business_id', $business_id); // Filter feedback videos based on business_id
+        //     })
+        //     ->with('businessUnit');  // Eager loading the businessUnit relationship
+        $query = FeedbackVideo::where('status', 'active')->get();
+        // if ($request->filled('business_unit_id') && $request->business_unit_id !== 'All') {
+        //     $query->where('business_unit_id', $request->business_unit_id);
+        // }
     
         if ($request->filled('from_date')) {
             $fromDate = Carbon::parse($request->from_date)->startOfDay();
@@ -67,13 +67,13 @@ class AdminController extends Controller
             $query->where('date', '<=', $toDate);
         }
 
-        $feedback_video = $query->get(['id', 'business_unit_id', 'feedback_video', 'date', 'time']); // Select necessary columns
+        $feedback_video = $query->get(['id', 'feedback_video', 'date', 'time']); // Select necessary columns
     
-        $businessName = Auth::guard('admins')->user()->business_name ?? 'User';
+        // $businessName = Auth::guard('admins')->user()->business_name ?? 'User';
     
-        $businessUnits = BusinessUnit::where('business_id', $business_id)->get();
+        // $businessUnits = BusinessUnit::where('business_id', $business_id)->get();
     
-        return view('dash-board', compact('businessName', 'feedback_video', 'businessUnits'));
+        return view('dash-board', compact('feedback_video'));
     }
 
     public function disableVideoFeedback($id)
