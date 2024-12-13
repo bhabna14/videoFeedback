@@ -15,5 +15,5 @@ Route::controller(BusinessUnitLoginController::class)->group(function() {
     Route::post('/check-unit-login',  'loginBusinessUnit');
 });
 
-Route::middleware('auth:sanctum')->post('/save-feedback-video', [FeedbackVideoController::class, 'saveFeedbackVideo']);
+Route::post('/save-feedback-video', [FeedbackVideoController::class, 'saveFeedbackVideo']);
 
