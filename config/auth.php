@@ -16,6 +16,11 @@ return [
             'driver' => 'session',
             'provider' => 'admins',
         ],
+        'business-unit' => [
+            'driver' => 'sanctum', // Ensure you are using Sanctum or Passport
+            'provider' => 'business-unit', // Matches your 'riders' provider
+            'hash' => false,        // Set to true only if using hashed tokens
+        ],
     ],
 
     'providers' => [
@@ -25,9 +30,13 @@ return [
         ],
 
         'admins' => [
-        'driver' => 'eloquent',
-        'model' => App\Models\Admin::class, // Replace with your Admin model's namespace
-    ],
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class, // Replace with your Admin model's namespace
+        ],
+        'business-unit' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\BusinessUnit::class,
+        ],
     ],
 
     'passwords' => [

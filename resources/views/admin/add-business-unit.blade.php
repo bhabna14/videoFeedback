@@ -3,6 +3,14 @@
 @section('styles')
     <!-- Internal Select2 css -->
     <link href="{{ asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet">
+    <style>
+        .social-logo {
+    height: 35px;
+    width: 35px;
+    object-fit: contain; /* This ensures the image maintains aspect ratio */
+}
+
+    </style>
 @endsection
 
 @section('content')
@@ -47,30 +55,33 @@
     <form action="{{ route('admin.save-business-unit') }}" method="post" enctype="multipart/form-data">
         @csrf
         <div class="row">
-          
-        
+
+
             <!-- Business Unit Name -->
             <div class="col-md-4 mb-3">
                 <label for="business_unit_name" class="form-label">Business Unit Name</label>
-                <input type="text" name="business_unit_name" class="form-control" id="business_unit_name" placeholder="Enter Unit Name" required>
+                <input type="text" name="business_unit_name" class="form-control" id="business_unit_name"
+                    placeholder="Enter Unit Name" required>
             </div>
-        
+
             <!-- Business Logo -->
             <div class="col-md-4 mb-3">
                 <label for="business_logo" class="form-label">Business Logo</label>
                 <input type="file" name="business_logo" class="form-control" id="business_logo" required>
             </div>
-        
+
             <!-- Mobile Number -->
             <div class="col-md-4 mb-3">
                 <label for="mobile_number" class="form-label">Mobile Number</label>
-                <input type="number" name="mobile_number" class="form-control" id="mobile_number" placeholder="Enter mobile number">
+                <input type="number" name="mobile_number" class="form-control" id="mobile_number"
+                    placeholder="Enter mobile number">
             </div>
-        
+
             <!-- WhatsApp Number -->
             <div class="col-md-4 mb-3">
                 <label for="whatsapp_number" class="form-label">WhatsApp Number</label>
-                <input type="number" name="whatsapp_number" class="form-control" id="whatsapp_number" placeholder="Enter WhatsApp number">
+                <input type="number" name="whatsapp_number" class="form-control" id="whatsapp_number"
+                    placeholder="Enter WhatsApp number">
             </div>
 
             <div class="col-md-4 mb-3">
@@ -82,7 +93,9 @@
                 <label for="password" class="form-label">Password</label>
                 <input type="text" name="password" class="form-control" id="password" placeholder="Enter Password">
             </div>
-        
+
+           
+            
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
@@ -93,55 +106,117 @@
                             <!-- Locality -->
                             <div class="col-md-4 mb-3">
                                 <label for="locality" class="form-label">Locality</label>
-                                <input type="text" name="locality" class="form-control" id="locality" placeholder="Enter locality">
+                                <input type="text" name="locality" class="form-control" id="locality"
+                                    placeholder="Enter locality">
                             </div>
-    
+
                             <!-- Pincode -->
                             <div class="col-md-4 mb-3">
                                 <label for="pincode" class="form-label">Pincode</label>
-                                <input type="number" name="pincode" class="form-control" id="pincode" placeholder="Enter pincode">
+                                <input type="number" name="pincode" class="form-control" id="pincode"
+                                    placeholder="Enter pincode">
                             </div>
-    
+
                             <!-- City -->
                             <div class="col-md-4 mb-3">
                                 <label for="city" class="form-label">City</label>
-                                <input type="text" name="city" class="form-control" id="city" placeholder="Enter city">
+                                <input type="text" name="city" class="form-control" id="city"
+                                    placeholder="Enter city">
                             </div>
-    
+
                             <!-- Town -->
                             <div class="col-md-4 mb-3">
                                 <label for="town" class="form-label">Town</label>
-                                <input type="text" name="town" class="form-control" id="town" placeholder="Enter town">
+                                <input type="text" name="town" class="form-control" id="town"
+                                    placeholder="Enter town">
                             </div>
-    
+
                             <!-- State -->
                             <div class="col-md-4 mb-3">
                                 <label for="state" class="form-label">State</label>
-                                <input type="text" name="state" class="form-control" id="state" placeholder="Enter state">
+                                <input type="text" name="state" class="form-control" id="state"
+                                    placeholder="Enter state">
                             </div>
-    
+
                             <!-- Country -->
                             <div class="col-md-4 mb-3">
                                 <label for="country" class="form-label">Country</label>
-                                <input type="text" name="country" class="form-control" id="country" placeholder="Enter country">
+                                <input type="text" name="country" class="form-control" id="country"
+                                    placeholder="Enter country">
                             </div>
-    
+
                             <!-- Full Address -->
                             <div class="col-md-12 mb-3">
                                 <label for="full_address" class="form-label">Full Address</label>
-                                <textarea name="full_address" class="form-control" id="full_address" rows="3" placeholder="Enter full address"></textarea>
+                                <textarea name="full_address" class="form-control" id="full_address" rows="3"
+                                    placeholder="Enter full address"></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>SOCIAL MEDIA</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row justify-content-center mt-4">
+                            <!-- Instagram -->
+                            <div class="col-md-2 text-center">
+                                <div class="d-flex justify-content-center">
+                                    <img src="{{ asset('assets/img/brand/instagram.png') }}" alt="Instagram" class="img-fluid social-logo">
+                                    <input type="text" class="form-control ml-2" placeholder="Instagram URL" name="social_media[instagram]">
+                                </div>
+                            </div>
+                            <!-- Facebook -->
+                            <div class="col-md-2 text-center">
+                                <div class="d-flex justify-content-center">
+                                    <img src="{{ asset('assets/img/brand/facebook.png') }}" alt="Facebook" class="img-fluid social-logo">
+                                    <input type="text" class="form-control ml-2" placeholder="Facebook URL" name="social_media[facebook]">
+                                </div>
+                            </div>
+                            <!-- WhatsApp -->
+                            <div class="col-md-2 text-center">
+                                <div class="d-flex justify-content-center">
+                                    <img src="{{ asset('assets/img/brand/whatsapp.png') }}" alt="WhatsApp" class="img-fluid social-logo">
+                                    <input type="text" class="form-control ml-2" placeholder="WhatsApp URL" name="social_media[whatsapp]">
+                                </div>
+                            </div>
+                            <!-- LinkedIn -->
+                            <div class="col-md-2 text-center">
+                                <div class="d-flex justify-content-center">
+                                    <img src="{{ asset('assets/img/brand/linkedin.png') }}" alt="LinkedIn" class="img-fluid social-logo">
+                                    <input type="text" class="form-control ml-2" placeholder="LinkedIn URL" name="social_media[linkedin]">
+                                </div>
+                            </div>
+                            <!-- YouTube -->
+                            <div class="col-md-2 text-center">
+                                <div class="d-flex justify-content-center">
+                                    <img src="{{ asset('assets/img/brand/youtube.png') }}" alt="YouTube" class="img-fluid social-logo">
+                                    <input type="text" class="form-control ml-2" placeholder="YouTube URL" name="social_media[youtube]">
+                                </div>
+                            </div>
+                            <!-- Twitter -->
+                            <div class="col-md-2 text-center">
+                                <div class="d-flex justify-content-center">
+                                    <img src="{{ asset('assets/img/brand/twitter.png') }}" alt="Twitter" class="img-fluid social-logo">
+                                    <input type="text" class="form-control ml-2" placeholder="Twitter URL" name="social_media[twitter]">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
             <!-- Submit Button -->
             <div class="col-12 mt-4">
                 <button type="submit" class="btn btn-primary w-100">Submit</button>
             </div>
         </div>
-    
+
     </form>
 @endsection
 

@@ -1,133 +1,426 @@
 @extends('layouts.app')
 
-    @section('styles')
+@section('styles')
+    <!-- INTERNAL Select2 css -->
+    <link href="{{ asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- INTERNAL Data table css -->
+    <link href="{{ asset('assets/plugins/datatable/css/dataTables.bootstrap5.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/plugins/datatable/css/buttons.bootstrap5.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/plugins/datatable/responsive.bootstrap5.css') }}" rel="stylesheet" />
 
-		<!-- INTERNAL Select2 css -->
-		<link href="{{asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet" />
+    <style>
+        .social-media-icon {
+    font-size: 24px;
+    margin-right: 10px;
+}
 
-		<!-- INTERNAL Data table css -->
-		<link href="{{asset('assets/plugins/datatable/css/dataTables.bootstrap5.css')}}" rel="stylesheet" />
-		<link href="{{asset('assets/plugins/datatable/css/buttons.bootstrap5.min.css')}}"  rel="stylesheet">
-		<link href="{{asset('assets/plugins/datatable/responsive.bootstrap5.css')}}" rel="stylesheet" />
+.social-media-icon.youtube {
+    color: #FF0000;
+}
 
-    @endsection
+.social-media-icon.twitter {
+    color: #1DA1F2;
+}
 
-    @section('content')
+.social-media-icon.facebook {
+    color: #3b5998;
+}
 
-					<!-- breadcrumb -->
-					<div class="breadcrumb-header justify-content-between">
-						<div class="left-content">
-						<span class="main-content-title mg-b-0 mg-b-lg-1">DASHBOARD</span>
-						</div>
-						<div class="justify-content-center mt-2">
-							<ol class="breadcrumb">
-								<li class="breadcrumb-item tx-15"><a href="javascript:void(0);">Dashboard</a></li>
-								<li class="breadcrumb-item active" aria-current="page">Sales</li>
-							</ol>
-						</div>
-					</div>
-					<!-- /breadcrumb -->
+.social-media-icon.instagram {
+    color: #E4405F;
+}
 
-					<!-- row -->
-					<div class="row">
-						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-							<div class="row">
-								<div class="col-xl-12 col-lg-12 col-md-12 col-xs-12">
-									<div class="card">
-										<div class="card-body">
-											<div class="row">
-												<div class="col-xl-9 col-lg-7 col-md-6 col-sm-12">
-													<div class="text-justified align-items-center">
-														<h3 class="text-dark font-weight-semibold mb-2 mt-0">Hi, Welcome Back <span class="text-primary">{{ $businessName }}</span></h3>
-														<p class="text-dark tx-14 mb-3 lh-3">You have used 85% of free plan storage. Please upgrade your plan to get unlimited storage.</p>
-														<button class="btn btn-primary shadow">Upgrade Now</button>
-													</div>
-												</div>
-												<div class="col-xl-3 col-lg-5 col-md-6 col-sm-12 d-flex align-items-center justify-content-center">
-													<div class="chart-circle float-md-end mt-4 mt-md-0" data-value="0.85" data-thickness="8" data-color="">
-														<canvas width="100" height="100"></canvas>
-														<div class="chart-circle-value circle-style">
-															<div class="tx-18 font-weight-semibold">85%</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- row closed -->
+.social-media-icon.whatsapp {
+    color: #25D366;
+}
+
+.social-media-icon.linkedin {
+    color: #0077b5;
+}
+
+.social-media-icon.default {
+    color: #6c757d;
+}
+
+    </style>
+@endsection
+
+@section('content')
+    <!-- breadcrumb -->
+    <div class="breadcrumb-header justify-content-between">
+        <div class="left-content">
+            <span class="main-content-title mg-b-0 mg-b-lg-1">DASHBOARD</span>
+        </div>
+        <div class="justify-content-center mt-2">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item tx-15"><a href="javascript:void(0);">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Sales</li>
+            </ol>
+        </div>
+    </div>
+    <!-- /breadcrumb -->
+
+    <!-- row -->
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-xs-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-9 col-lg-7 col-md-6 col-sm-12">
+                                    <div class="text-justified align-items-center">
+                                        <h3 class="text-dark font-weight-semibold mb-2 mt-0">Hi, Welcome Back <span
+                                                class="text-primary">{{ $businessName }}</span></h3>
+                                        <p class="text-dark tx-14 mb-3 lh-3">You have used 85% of free plan storage. Please
+                                            upgrade your plan to get unlimited storage.</p>
+                                        <button class="btn btn-primary shadow">Upgrade Now</button>
+                                    </div>
+                                </div>
+                                <div
+                                    class="col-xl-3 col-lg-5 col-md-6 col-sm-12 d-flex align-items-center justify-content-center">
+                                    <div class="chart-circle float-md-end mt-4 mt-md-0" data-value="0.85" data-thickness="8"
+                                        data-color="">
+                                        <canvas width="100" height="100"></canvas>
+                                        <div class="chart-circle-value circle-style">
+                                            <div class="tx-18 font-weight-semibold">85%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- row closed -->
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
 
 
-					<!-- row  -->
-					<div class="row">
-						<div class="col-12 col-sm-12">
-							<div class="card">
-								<div class="card-header">
-									<h4 class="card-title">Feedback Video</h4>
-								</div>
-								<div class="card-body pt-0 example1-table">
-									<div class="table-responsive">
-										<table class="table  table-bordered text-nowrap mb-0" id="example1">
-											<thead>
-												<tr>
-													<th class="text-center">SlNo.</th>
-													<th>Business Unit Name</th>
-													<th>Date</th>
-													<th>Time</th>
-													<th>Video</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td class="text-center">01</td>
-													<td>Sean Black</td>
-													<td>23-11-05</td>
-													<td>02:02</td>
-													<td><span class="badge badge-success">View</span></td>
-												</tr>
-												
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- /row closed -->
+    <!-- row  -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="card-title mb-0">Feedback Video Report</h4>
+                </div>
 
-    @endsection
+                <form method="GET" class="p-4">
+                    @csrf
+                    <div class="row g-3">
 
-    @section('scripts')
+                        <!-- Business Unit Name -->
+                        <div class="col-md-3">
+                            <label for="business_unit_id" class="form-label">Business Unit Name</label>
+                            <select name="business_unit_id" id="business_unit_id" class="form-control">
+                                <option value="All">All</option>
+                                @foreach ($businessUnits as $unit)
+                                    <option value="{{ $unit->business_unit_id }}"
+                                        @if (request('business_unit_id') == $unit->business_unit_id) selected @endif>
+                                        {{ $unit->business_unit_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
-		<!-- Internal Chart.Bundle js-->
-		<script src="{{asset('assets/plugins/chartjs/Chart.bundle.min.js')}}"></script>
+                        <!-- From Date -->
+                        <div class="col-md-3">
+                            <label for="from_date" class="form-label">From Date</label>
+                            <input type="date" name="from_date" id="from_date" class="form-control"
+                                value="{{ request('from_date') }}">
+                        </div>
 
-		<!-- Moment js -->
-		<script src="{{asset('assets/plugins/raphael/raphael.min.js')}}"></script>
+                        <!-- To Date -->
+                        <div class="col-md-3">
+                            <label for="to_date" class="form-label">To Date</label>
+                            <input type="date" name="to_date" id="to_date" class="form-control"
+                                value="{{ request('to_date') }}">
+                        </div>
 
-		<!-- INTERNAL Apexchart js -->
-		<script src="{{asset('assets/js/apexcharts.js')}}"></script>
+                        <!-- Submit Button -->
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">
+                                Search
+                            </button>
+                        </div>
+                    </div>
+                </form>
 
-		<!--Internal Sparkline js -->
-		<script src="{{asset('assets/plugins/jquery-sparkline/jquery.sparkline.min.js')}}"></script>
+                <div class="card-body pt-0">
+                    <div class="table-responsive">
+                        <table class="table table-bordered text-center mb-0" id="example1">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th class="text-center">Sl No.</th>
+                                    <th>Business Unit Name</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Video</th>
+                                    <th>Rating</th>
+                                    <th>Comments</th>
+                                    <th>Social Media</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($feedback_video as $index => $video)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $video->businessUnit->business_unit_name }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($video->date)->format('d-m-Y') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($video->time)->format('h:i A') }}</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#videoModal" onclick="openVideoModal('{{ $video->feedback_video }}')">
+                                                View Video
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <!-- Like and Dislike Buttons -->
+                                            <form action="{{ route('admin.saveRating', $video->id) }}" method="POST" id="ratingForm{{ $video->id }}">
+                                                @csrf
+                                                <button type="submit" name="rating" value="like" class="btn btn-sm {{ $video->rating == 'like' ? 'btn-success' : 'btn-light' }}" id="likeBtn{{ $video->id }}">
+                                                    <i class="fa fa-thumbs-up"></i>
+                                                </button>
+                                                <button type="submit" name="rating" value="dislike" class="btn btn-sm {{ $video->rating == 'dislike' ? 'btn-danger' : 'btn-light' }}" id="dislikeBtn{{ $video->id }}">
+                                                    <i class="fa fa-thumbs-down"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <!-- Comment Input Field -->
+                                            <form action="{{ route('admin.saveComment', $video->id) }}" method="POST" id="commentForm{{ $video->id }}">
+                                                @csrf
+                                                <input type="text" name="comments" class="form-control" placeholder="Add a comment">
+                                                <button type="submit" class="btn btn-sm btn-success mt-2">Save</button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            @foreach($video->businessUnit->socialMedia as $socialMedia)
+                                                <a href="{{ $socialMedia->social_media_link }}" target="_blank" class="social-media-icon" style="font-size: 24px; margin-right: 5px;">
+                                                    @switch(strtolower($socialMedia->social_media_name))
+                                                        @case('youtube')
+                                                            <i class="fab fa-youtube" style="color: #FF0000;"></i>  <!-- YouTube Red -->
+                                                            @break
+                                                        @case('twitter')
+                                                            <i class="fab fa-twitter" style="color: #1DA1F2;"></i>  <!-- Twitter Blue -->
+                                                            @break
+                                                        @case('facebook')
+                                                            <i class="fab fa-facebook" style="color: #3b5998;"></i>  <!-- Facebook Blue -->
+                                                            @break
+                                                        @case('instagram')
+                                                            <i class="fab fa-instagram" style="color: #E4405F;"></i>  <!-- Instagram Pink -->
+                                                            @break
+                                                        @case('whatsapp')
+                                                            <i class="fab fa-whatsapp" style="color: #25D366;"></i>  <!-- WhatsApp Green -->
+                                                            @break
+                                                        @case('linkedin')
+                                                            <i class="fab fa-linkedin" style="color: #0077b5;"></i>  <!-- LinkedIn Blue -->
+                                                            @break
+                                                        @default
+                                                            <i class="fab fa-share-alt" style="color: #6c757d;"></i>  <!-- Default Grey -->
+                                                    @endswitch
+                                                </a>
+                                            @endforeach
+                                        </td>
+                                        
+                                        <td class="d-flex justify-content-start">
+                                            <!-- Disable Video -->
+                                            <form action="{{ route('admin.disableVideoFeedback', $video->id) }}" method="POST" id="disabledForm{{ $video->id }}">
+                                                @csrf
+                                                <button type="button" class="btn btn-md btn-dark mr-2" onclick="confirmDisabled({{ $video->id }})">
+                                                    <i class="fa fa-eye-slash"></i>
+                                                </button>
+                                            </form>
+                            
+                                            <!-- Delete Video -->
+                                            <form action="{{ route('admin.deleteVideoFeedback', $video->id) }}" method="POST" id="deleteForm{{ $video->id }}">
+                                                @csrf
+                                                <button type="button" class="btn btn-md btn-danger" style="margin-left: 5px" onclick="confirmDelete({{ $video->id }})">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5">No feedback videos available</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                            
+                        </table>
 
-		<!--Internal  index js -->
-		<script src="{{asset('assets/js/index.js')}}"></script>
+                        <!-- Modal for Video -->
+                        <div class="modal fade" id="videoModal" tabindex="-1" role="dialog"
+                            aria-labelledby="videoModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-md" role="document">
+                                <div class="modal-content">
 
-        <!-- Chart-circle js -->
-		<script src="{{asset('assets/js/chart-circle.js')}}"></script>
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="videoModalLabel">Video</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
 
-		<!-- Internal Data tables -->
-		<script src="{{asset('assets/plugins/datatable/js/jquery.dataTables.min.js')}}"></script>
-		<script src="{{asset('assets/plugins/datatable/js/dataTables.bootstrap5.js')}}"></script>
-		<script src="{{asset('assets/plugins/datatable/dataTables.responsive.min.js')}}"></script>
-		<script src="{{asset('assets/plugins/datatable/responsive.bootstrap5.min.js')}}"></script>
+                                    <div class="modal-body">
+                                        <!-- Video Player -->
+                                        <video id="videoPlayer" controls class="w-100">
+                                            <source id="videoSource" src="" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </div>
 
-		<!-- INTERNAL Select2 js -->
-		<script src="{{asset('assets/plugins/select2/js/select2.full.min.js')}}"></script>
-		<script src="{{asset('assets/js/select2.js')}}"></script>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-    @endsection
+
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('scripts')
+    <!-- Internal Chart.Bundle js-->
+    <script src="{{ asset('assets/plugins/chartjs/Chart.bundle.min.js') }}"></script>
+
+    <!-- Moment js -->
+    <script src="{{ asset('assets/plugins/raphael/raphael.min.js') }}"></script>
+
+    <!-- INTERNAL Apexchart js -->
+    <script src="{{ asset('assets/js/apexcharts.js') }}"></script>
+
+    <!--Internal Sparkline js -->
+    <script src="{{ asset('assets/plugins/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
+
+    <!--Internal  index js -->
+    <script src="{{ asset('assets/js/index.js') }}"></script>
+
+    <!-- Chart-circle js -->
+    <script src="{{ asset('assets/js/chart-circle.js') }}"></script>
+
+    <!-- Internal Data tables -->
+    <script src="{{ asset('assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/datatable/js/dataTables.bootstrap5.js') }}"></script>
+    <script src="{{ asset('assets/plugins/datatable/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/datatable/responsive.bootstrap5.min.js') }}"></script>
+
+    <!-- INTERNAL Select2 js -->
+    <script src="{{ asset('assets/plugins/select2/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('assets/js/select2.js') }}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function confirmDisabled(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to disable this video feedback!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, disable it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit the form to disable the video
+                    document.getElementById('disabledForm' + id).submit();
+                    Swal.fire('Disabled!', 'The video has been disabled.', 'success');
+                }
+            });
+        }
+
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to permanently delete this video feedback!",
+                icon: 'danger',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit the form to delete the video
+                    document.getElementById('deleteForm' + id).submit();
+                    Swal.fire('Deleted!', 'The video has been deleted.', 'success');
+                }
+            });
+        }
+    </script>
+
+
+    <!-- JavaScript to handle the button highlighting -->
+    <script>
+        function highlightButton(videoId, ratingType) {
+            // Clear all buttons for this video
+            const likeBtn = document.getElementById('likeBtn' + videoId);
+            const dislikeBtn = document.getElementById('dislikeBtn' + videoId);
+
+            if (ratingType === 'like') {
+                likeBtn.classList.add('btn-success');
+                likeBtn.classList.remove('btn-light');
+                dislikeBtn.classList.add('btn-light');
+                dislikeBtn.classList.remove('btn-danger');
+            } else {
+                dislikeBtn.classList.add('btn-danger');
+                dislikeBtn.classList.remove('btn-light');
+                likeBtn.classList.add('btn-light');
+                likeBtn.classList.remove('btn-success');
+            }
+        }
+    </script>
+    <script>
+        setTimeout(function() {
+            document.getElementById('Message').style.display = 'none';
+        }, 3000);
+        setTimeout(function() {
+            document.getElementById('Messages').style.display = 'none';
+        }, 3000);
+    </script>
+
+<script>
+    // Function to open the modal and set the video source
+    function openVideoModal(videoUrl) {
+        var videoPlayer = document.getElementById('videoPlayer');
+        var videoSource = document.getElementById('videoSource');
+        
+        // Set the video source URL (ensure it's correct and accessible)
+        videoSource.src = videoUrl;
+        videoPlayer.load();  // Load the new video into the player
+        
+        // If the video doesn't load, show an error message
+        videoPlayer.onerror = function() {
+            alert('Error loading video. Please try again.');
+        };
+    }
+</script>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+@endsection

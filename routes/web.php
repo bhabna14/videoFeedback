@@ -6,7 +6,6 @@ use App\Http\Controllers\BusinessLoginController;
 use App\Http\Controllers\Admin\BusinessUnitController;
 use App\Http\Controllers\Admin\AdminController;
 
-
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,6 +16,12 @@ Route::prefix('admin')->group(function () {
     Route::get('/business-login', [AdminController::class, 'showLoginForm'])->name('admin.login');
     Route::post('/dash-board', [AdminController::class, 'login'])->name('admin.login.post');
     Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
+Route::post('/disable-video-feedback/{id}',[AdminController::class,'disableVideoFeedback'])->name('admin.disableVideoFeedback');
+Route::post('/delete-video-feedback/{id}',[AdminController::class,  'deleteVideoFeedback'])->name('admin.deleteVideoFeedback');
+Route::post('feedback-video/{videoId}/save-comment', [AdminController::class, 'saveComment'])->name('admin.saveComment');
+Route::post('feedback-video/{videoId}/save-rating', [AdminController::class, 'saveRating'])->name('admin.saveRating');
+
+
 });
 
 Route::prefix('admin')->middleware('auth:admins')->group(function () {
@@ -29,6 +34,7 @@ Route::prefix('admin')->middleware('auth:admins')->group(function () {
         Route::post('/delete-business-unit/{id}',  'deleteBusinessUnit')->name('admin.deleteBusinessUnit');
         Route::get('/edit-business-unit/{id}', 'editBusinessUnit')->name('admin.edit-business-unit');
         Route::put('/update-business-unit/{id}', 'updateBusinessUnit')->name('admin.update-business-unit');
+        Route::get('/get-social-media-links/{id}', 'getSocialMediaLinks');
     });
 });
 

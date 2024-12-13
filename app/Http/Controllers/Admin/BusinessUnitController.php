@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 use App\Models\BusinessUnit;
+use App\Models\BusinessUnitSocialMedia;
+
 
 
 
@@ -20,7 +22,6 @@ class BusinessUnitController extends Controller
         return view('admin.add-business-unit', compact('businessName')); 
 
     }
-
     public function saveBusinessUnit(Request $request)
     {
         // Validation rules
@@ -38,31 +39,31 @@ class BusinessUnitController extends Controller
             'state' => 'nullable|string|max:255',
             'country' => 'nullable|string|max:255',
             'full_address' => 'nullable|string',
+            'social_media' => 'nullable|array',
+            'social_media.*' => 'nullable|url', // Ensure each social media URL is valid
         ]);
     
         try {
-            // Handle file upload
+            // Handle file upload for business logo
             $businessLogoPath = null;
             if ($request->hasFile('business_logo')) {
                 $businessLogo = $request->file('business_logo');
                 $businessLogoPath = $businessLogo->store('uploads/business_logos', 'public');
             }
-
-            
+    
             $business_id = Auth::guard('admins')->user()->business_id;
-            
             $business_unit_id = 'BUSINESS_UNIT' . rand(100000, 999999);
-
-            // Save data to database
+    
+            // Save data to BusinessUnit model
             $businessUnit = BusinessUnit::create([
-                'business_id' =>  $business_id,
-                'business_unit_id' =>  $business_unit_id,
+                'business_id' => $business_id,
+                'business_unit_id' => $business_unit_id,
                 'business_unit_name' => $request->business_unit_name,
                 'business_logo' => $businessLogoPath,
                 'mobile_number' => $request->mobile_number,
                 'whatsapp_number' => $request->whatsapp_number,
                 'user_name' => $request->user_name,
-                'password' => Hash::make($request->password), // Encrypt password
+                'password' => Hash::make($request->password),
                 'locality' => $request->locality,
                 'pincode' => $request->pincode,
                 'city' => $request->city,
@@ -72,24 +73,62 @@ class BusinessUnitController extends Controller
                 'full_address' => $request->full_address,
             ]);
     
+            // Save social media links if any
+            if ($request->has('social_media')) {
+                foreach ($request->social_media as $platform => $url) {
+                    if (!empty($url)) {
+                        BusinessUnitSocialMedia::create([
+                            'business_id' => $business_id,
+                            'business_unit_id' => $business_unit_id,
+                            'social_media_name' => $platform,
+                            'social_media_link' => $url,
+                        ]);
+                    }
+                }
+            }
+    
             // Redirect with success message
             return redirect()->back()->with('success', 'Business Unit created successfully!');
         } catch (\Exception $e) {
             // Log the error for debugging purposes
             \Log::error('Error creating business unit: ', ['error' => $e->getMessage()]);
-            
+    
             // Handle any unexpected errors
             return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
         }
     }
-
+    
     public function manageBusinessUnit()
     {
-        // Fetch all business units from the database
-        $businessUnits = BusinessUnit::where('status','active')->get();
-
+        // Fetch all business units along with their social media links
+        $businessUnits = BusinessUnit::where('status', 'active')->get();
+            
+    
         // Return the view and pass the business units to it
         return view('admin/manage-business-unit', compact('businessUnits'));
+    }
+
+    public function getSocialMediaLinks(Request $request)
+    {
+        $businessUnitId = $request->query('businessUnitId');
+    
+        // Log the request to ensure businessUnitId is being passed correctly
+        \Log::info("Fetching social media links for business unit ID: " . $businessUnitId);
+    
+        // Check if the businessUnitId exists in the database
+        $socialMediaLinks = BusinessUnitSocialMedia::where('business_unit_id', $businessUnitId)
+            ->where('status', 'active') // Optional, only fetch active social media links
+            ->get(['social_media_name as platform', 'social_media_link as url']);
+    
+        // Log the fetched social media links
+        \Log::info("Fetched social media links: " . json_encode($socialMediaLinks));
+    
+        // If no links are found, return an empty array
+        if ($socialMediaLinks->isEmpty()) {
+            return response()->json(['links' => []], 200);
+        }
+    
+        return response()->json(['links' => $socialMediaLinks], 200);
     }
     
 

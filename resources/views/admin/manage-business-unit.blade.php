@@ -7,6 +7,7 @@
     <link href="{{ asset('assets/plugins/datatable/responsive.bootstrap5.css') }}" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- INTERNAL Select2 css -->
     <link href="{{ asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet" />
@@ -57,6 +58,7 @@
                                     <th class="border-bottom-0">Business Unit Name</th>
                                     <th class="border-bottom-0">Business Logo</th>
                                     <th class="border-bottom-0">Address</th>
+                                    <th class="border-bottom-0">Social Media</th>
                                     <th class="border-bottom-0">Status</th>
                                     <th class="border-bottom-0">Action</th>
                                 </tr>
@@ -69,29 +71,42 @@
                                         <td>{{ $unit->business_unit_name }}</td>
                                         <td>
                                             <a href="{{ asset('storage/' . $unit->business_logo) }}" target="_blank">
-                                                <img src="{{ asset('storage/' . $unit->business_logo) }}" alt="Logo" width="50">
+                                                <img src="{{ asset('storage/' . $unit->business_logo) }}" alt="Logo"
+                                                    width="50">
                                             </a>
                                         </td>
-                                        
+
                                         <td>
-                                            <button class="btn btn-primary" data-bs-toggle="modal"
+                                            <button class="btn btn-danger" data-bs-toggle="modal"
                                                 data-bs-target="#addressModal{{ $unit->id }}">
                                                 View Address
                                             </button>
                                         </td>
+                                        <td>
+                                            <button class="btn btn-dark social-media-btn"
+                                                onclick="showSocialMediaModal({{ $unit->id }})">
+                                                Social Media Link
+                                            </button>
+
+
+                                        </td>
                                         <td>{{ $unit->status }}</td>
                                         <td>
-                                            <form action="{{ route('admin.deleteBusinessUnit', $unit->id) }}" method="POST" id="deleteForm{{ $unit->id }}">
+                                            <form action="{{ route('admin.deleteBusinessUnit', $unit->id) }}"
+                                                method="POST" id="deleteForm{{ $unit->id }}">
                                                 @csrf
-                                                <button type="button" class="btn btn-md btn-danger" onclick="confirmDelete({{ $unit->id }})">
+                                                <button type="button" class="btn btn-md btn-danger"
+                                                    onclick="confirmDelete({{ $unit->id }})">
                                                     <i class="fa fa-trash"></i>
                                                 </button>
-                                                <a href="{{ url('admin/edit-business-unit', $unit->id) }}" class="btn btn-md btn-primary">
+                                                <a href="{{ url('admin/edit-business-unit', $unit->id) }}"
+                                                    class="btn btn-md btn-primary">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
                                             </form>
                                         </td>
                                     </tr>
+
 
                                     <!-- Modal for Address Details -->
                                     <div class="modal fade" id="addressModal{{ $unit->id }}" tabindex="-1"
@@ -102,42 +117,71 @@
                                                     <h5 class="modal-title" id="addressModalLabel{{ $unit->id }}">
                                                         <i class="fas fa-map-marker-alt"></i> Business Unit Address
                                                     </h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="p-3">
-                                                        <p class="mb-2"><strong class="text-secondary">Full Address:</strong> 
+                                                        <p class="mb-2"><strong class="text-secondary">Full
+                                                                Address:</strong>
                                                             <span class="text-dark">{{ $unit->full_address }}</span>
                                                         </p>
-                                                        <p class="mb-2"><strong class="text-secondary">Locality:</strong> 
+                                                        <p class="mb-2"><strong class="text-secondary">Locality:</strong>
                                                             <span class="text-dark">{{ $unit->locality }}</span>
                                                         </p>
-                                                        <p class="mb-2"><strong class="text-secondary">City:</strong> 
-                                                            <span class="text-dark">{{ $unit->city }}</span>
-                                                        </p>
-                                                        <p class="mb-2"><strong class="text-secondary">State:</strong> 
-                                                            <span class="text-dark">{{ $unit->state }}</span>
-                                                        </p>
-                                                        <p class="mb-2"><strong class="text-secondary">Country:</strong> 
-                                                            <span class="text-dark">{{ $unit->country }}</span>
-                                                        </p>
-                                                        <p><strong class="text-secondary">Pincode:</strong> 
+                                                        <p><strong class="text-secondary">Pincode:</strong>
                                                             <span class="text-dark">{{ $unit->pincode }}</span>
                                                         </p>
+                                                        <p class="mb-2"><strong class="text-secondary">City:</strong>
+                                                            <span class="text-dark">{{ $unit->city }}</span>
+                                                        </p>
+                                                        <p class="mb-2"><strong class="text-secondary">State:</strong>
+                                                            <span class="text-dark">{{ $unit->state }}</span>
+                                                        </p>
+                                                        <p class="mb-2"><strong class="text-secondary">Country:</strong>
+                                                            <span class="text-dark">{{ $unit->country }}</span>
+                                                        </p>
+
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer bg-light">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">
                                                         Close
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    
                                 @endforeach
                             </tbody>
                         </table>
+
+
+                        <!-- Single Reusable Modal for Social Media -->
+                        <div class="modal fade" id="socialMediaModal" tabindex="-1"
+                            aria-labelledby="socialMediaModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-primary text-white">
+                                        <h5 class="modal-title" id="socialMediaModalLabel">
+                                            <i class="fas fa-share-alt"></i> Social Media Links
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div id="socialMediaContent" class="p-3">
+                                            <!-- Social media links will be populated here -->
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer bg-light">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
 
                     </div>
@@ -163,6 +207,7 @@
     <script src="{{ asset('assets/plugins/datatable/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/datatable/responsive.bootstrap5.min.js') }}"></script>
     <script src="{{ asset('assets/js/table-data.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- INTERNAL Select2 js -->
     <script src="{{ asset('assets/plugins/select2/js/select2.full.min.js') }}"></script>
@@ -172,24 +217,74 @@
         }, 3000);
     </script>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-    function confirmDelete(unitId) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'You won\'t be able to revert this!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'Cancel',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Submit the form if the user confirms
-                document.getElementById('deleteForm' + unitId).submit();
+    <script>
+        function confirmDelete(unitId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit the form if the user confirms
+                    document.getElementById('deleteForm' + unitId).submit();
+                }
+            });
+        }
+    </script>
+    <script>
+    function fetchSocialMediaLinks(businessUnitId) {
+    // Define the API endpoint to fetch social media links
+    const apiUrl = `/admin/get-social-media-links?businessUnitId=${businessUnitId}`;
+
+    // Show a loading indicator while the data is being fetched
+    document.getElementById('socialMediaContent').innerHTML = '<p>Loading...</p>';
+    new bootstrap.Modal(document.getElementById('socialMediaModal')).show();
+
+    // Fetch social media links from the API
+    fetch(apiUrl)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
+            return response.json();
+        })
+        .then((data) => {
+            // Handle the case when no links are returned
+            if (!data.links || data.links.length === 0) {
+                document.getElementById('socialMediaContent').innerHTML = '<p>No social media links available.</p>';
+            } else {
+                // Populate the modal with social media links
+                let contentHtml = '<ul class="list-group">';
+                data.links.forEach((link) => {
+                    contentHtml += `
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>${link.platform}</span>
+                            <a href="${link.url}" target="_blank" class="btn btn-sm btn-primary">
+                                Visit <i class="fas fa-external-link-alt"></i>
+                            </a>
+                        </li>`;
+                });
+                contentHtml += '</ul>';
+                document.getElementById('socialMediaContent').innerHTML = contentHtml;
+            }
+        })
+        .catch((error) => {
+            console.error('Error fetching social media links:', error);
+            document.getElementById('socialMediaContent').innerHTML =
+                '<p>Failed to load social media links. Please try again later.</p>';
         });
-    }
-</script>
+}
+
+// Call this function when a social media button is clicked
+function showSocialMediaModal(businessUnitId) {
+    fetchSocialMediaLinks(businessUnitId);
+}
+
+    </script>
 @endsection

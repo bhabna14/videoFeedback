@@ -12,8 +12,19 @@ class FeedbackVideo extends Model
     protected $table = 'business_feedback';
 
     protected $fillable = [
-        // 'business_id',
-        // 'business_unit_id',
+        'business_unit_id',
         'feedback_video',
+        'date',
+        'time',
+        'comments',
+        'rating',
     ];
+
+    // FeedbackVideo Model
+public function businessUnit()
+{
+    return $this->belongsTo(BusinessUnit::class, 'business_unit_id', 'business_unit_id');
+}
+
+
 }
