@@ -206,42 +206,20 @@
                                             </form>
                                         </td>
                                         <td>
-                                            <!-- Add Comment Button -->
-                                            <button class="btn btn-sm btn-primary" data-toggle="modal"
-                                                data-target="#commentModal{{ $video->id }}">
-                                                <i class="fa fa-edit"></i>
-                                            </button>
+                                            <!-- Comment Input Field -->
+                                            <form action="{{ route('admin.saveComment', $video->id) }}" method="POST"
+                                                id="commentForm{{ $video->id }}">
+                                                @csrf
+                                                <div class="d-flex align-items-center">
+                                                    <!-- Input Field -->
+                                                    <input type="text" name="comments"
+                                                        class="form-control form-control-sm mr-2"
+                                                        placeholder="Add a comment" value="{{ $video->comments }}">
 
-                                            <!-- Modal for adding comment -->
-                                            <div class="modal fade" id="commentModal{{ $video->id }}" tabindex="-1"
-                                                role="dialog" aria-labelledby="commentModalLabel{{ $video->id }}"
-                                                aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title"
-                                                                id="commentModalLabel{{ $video->id }}">Add Comment for
-                                                                Video</h5>
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <!-- Comment Form -->
-                                                            <form action="{{ route('admin.saveComment', $video->id) }}"
-                                                                method="POST" id="commentForm{{ $video->id }}">
-                                                                @csrf
-                                                                <div class="form-group">
-                                                                    <textarea name="comments" class="form-control" placeholder="Enter your comment" rows="4">{{ $video->comments }}</textarea>
-                                                                </div>
-                                                                <button type="submit" class="btn btn-success">Save
-                                                                    Comment</button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
+                                                    <!-- Save Button -->
+                                                    <button type="submit" class="btn btn-sm btn-success">Save</button>
                                                 </div>
-                                            </div>
+                                            </form>
                                         </td>
 
 
@@ -266,54 +244,32 @@
                                                             <!-- Facebook Blue -->
                                                         @break
 
-                                                                            @case('instagram')
-                                                                                <i class="fab fa-instagram"
-                                                                                    style="color: #E4405F; font-size: 36px;"></i>
-                                                                            @break
+                                                        @case('instagram')
+                                                            <i class="fab fa-instagram" style="color: #E4405F;"></i>
+                                                            <!-- Instagram Pink -->
+                                                        @break
 
-                                                                            @case('twitter')
-                                                                                <img src="{{ asset('assets/img/brand/twitter.png') }}"
-                                                                                    alt="Twitter"
-                                                                                    class="img-fluid social-logo me-2"
-                                                                                    style="width: 36px; height: 36px;">
-                                                                            @break
+                                                        @case('whatsapp')
+                                                            <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+                                                            <!-- WhatsApp Green -->
+                                                        @break
 
-                                                                            @case('linkedin')
-                                                                                <i class="fab fa-linkedin"
-                                                                                    style="color: #0077b5; font-size: 36px;"></i>
-                                                                            @break
+                                                        @case('linkedin')
+                                                            <i class="fab fa-linkedin" style="color: #0077b5;"></i>
+                                                            <!-- LinkedIn Blue -->
+                                                        @break
 
-                                                                            @case('youtube')
-                                                                                <i class="fab fa-youtube"
-                                                                                    style="color: #FF0000; font-size: 36px;"></i>
-                                                                            @break
+                                                        @case('website')
+                                                            <i class="fas fa-globe" style="color: #0000FF;"></i>
+                                                            <!-- Website Blue -->
+                                                        @break
 
-                                                                            @case('website')
-                                                                                <i class="fas fa-globe"
-                                                                                    style="color: #0d6efd; font-size: 36px;"></i>
-                                                                                <!-- Changed icon color to blue -->
-                                                                            @break
-
-                                                                            @case('whatsapp')
-                                                                                <i class="fab fa-whatsapp"
-                                                                                    style="color: #25D366; font-size: 36px;"></i>
-                                                                                <!-- Changed icon color to WhatsApp green -->
-                                                                            @break
-
-                                                                            @default
-                                                                                <i class="fas fa-globe"
-                                                                                    style="color: #6c757d; font-size: 36px;"></i>
-                                                                        @endswitch
-                                                                    </a>
-                                                                @endforeach
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
+                                                        @default
+                                                            <i class="fab fa-share-alt" style="color: #6c757d;"></i>
+                                                            <!-- Default Grey -->
+                                                    @endswitch
+                                                </a>
+                                            @endforeach
                                         </td>
 
                                         <td class="d-flex justify-content-start">
