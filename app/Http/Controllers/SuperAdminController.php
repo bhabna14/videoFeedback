@@ -4,9 +4,41 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Admin;
-
+use Illuminate\Support\Facades\Auth;
 class SuperAdminController extends Controller
 {
+    public function superadminlogin(){
+        return view("superadminlogin");
+    }
+    public function authenticate(Request $request)
+    {
+        
+        $credentials = $request->validate([
+            'email' => 'required',
+            'password' => 'required'
+        ]);
+        
+        if (Auth::guard('superadmins')->attempt($request->only('email', 'password'))) {
+        //    dd('hi');
+            return redirect()->intended('/superadmin/dashboard');
+            // return view("/superadmin/dashboard");
+        }
+      
+        return redirect()->back()->withErrors(['email' => 'Invalid credentials.']); // Redirect back with error message
+    }
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/superadmin');
+    }
+    public function dashboard(){
+        return view('/superadmin/dashboard');
+    }
     public function businessRegister()
     {
         return view('sign-up');
@@ -49,6 +81,14 @@ class SuperAdminController extends Controller
             // Redirect back with error message
             return redirect()->back()->with('error', 'Error: ' . $e->getMessage());
         }
+    }
+
+    public function businesslist(){
+        $adminlists = Admin::all();
+        return view('superadmin.businesslist',compact('adminlists'));
+    }
+    public function addadmin(){
+        return view('superadmin.addadmin');
     }
     
 }

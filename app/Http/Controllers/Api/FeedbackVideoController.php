@@ -7,25 +7,31 @@ use Illuminate\Http\Request;
 use App\Models\FeedbackVideo;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
  
 class FeedbackVideoController extends Controller
 {
     public function saveFeedbackVideo(Request $request)
     {
         try {
-           
-   
+            // Check if a video file is uploaded
             if ($request->hasFile('feedback_video')) {
                 $video = $request->file('feedback_video');
                 $videoPath = $video->store('uploads/feedback_videos', 'public');
+       
+                // Retrieve the authenticated business unit
+                $business_unit_id = Auth::guard('sanctum')->user()->business_unit_id;
    
-                // Get the full URL for the uploaded video
-                $videoUrl = asset('storage/' . $videoPath);
-               
- 
+                // Get the current date and time
+                $currentDate = Carbon::now('Asia/Kolkata')->toDateString(); // Format: 'YYYY-MM-DD'
+                $currentTime = Carbon::now('Asia/Kolkata')->toTimeString(); // Format: 'HH:MM:SS'
+   
+                // Save feedback video
                 $feedbackVideo = FeedbackVideo::create([
-                    'feedback_video' => $videoUrl,
-                    
+                    'business_unit_id' => $business_unit_id,
+                    'feedback_video' => $videoPath,
+                    'date' => $currentDate,
+                    'time' => $currentTime,
                 ]);
    
                 return response()->json([
@@ -46,8 +52,10 @@ class FeedbackVideoController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'An error occurred while uploading the feedback video.',
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
+   
    
 }
