@@ -207,84 +207,126 @@
                                         </td>
                                         <td>
                                             <!-- Add Comment Button -->
-                                            <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#commentModal{{ $video->id }}">
+                                            <button class="btn btn-sm btn-primary" data-toggle="modal"
+                                                data-target="#commentModal{{ $video->id }}">
                                                 <i class="fa fa-edit"></i>
                                             </button>
-                                        
+
                                             <!-- Modal for adding comment -->
-                                            <div class="modal fade" id="commentModal{{ $video->id }}" tabindex="-1" role="dialog"
-                                                aria-labelledby="commentModalLabel{{ $video->id }}" aria-hidden="true">
+                                            <div class="modal fade" id="commentModal{{ $video->id }}" tabindex="-1"
+                                                role="dialog" aria-labelledby="commentModalLabel{{ $video->id }}"
+                                                aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="commentModalLabel{{ $video->id }}">Add Comment for Video</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <h5 class="modal-title"
+                                                                id="commentModalLabel{{ $video->id }}">Add Comment for
+                                                                Video</h5>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
                                                             <!-- Comment Form -->
-                                                            <form action="{{ route('admin.saveComment', $video->id) }}" method="POST" id="commentForm{{ $video->id }}">
+                                                            <form action="{{ route('admin.saveComment', $video->id) }}"
+                                                                method="POST" id="commentForm{{ $video->id }}">
                                                                 @csrf
                                                                 <div class="form-group">
                                                                     <textarea name="comments" class="form-control" placeholder="Enter your comment" rows="4">{{ $video->comments }}</textarea>
                                                                 </div>
-                                                                <button type="submit" class="btn btn-success">Save Comment</button>
+                                                                <button type="submit" class="btn btn-success">Save
+                                                                    Comment</button>
                                                             </form>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>
-                                        
-
 
                                         <td>
-                                            @foreach ($video->businessUnit->socialMedia as $socialMedia)
-                                                <a href="{{ $socialMedia->social_media_link }}" target="_blank"
-                                                    class="social-media-icon" style="font-size: 24px; margin-right: 5px;">
-                                                    @switch(strtolower($socialMedia->social_media_name))
-                                                        @case('youtube')
-                                                            <i class="fab fa-youtube" style="color: #FF0000;"></i>
-                                                            <!-- YouTube Red -->
-                                                        @break
+                                            <!-- Social Media Modal Trigger -->
+                                            <button class="btn btn-sm btn-info" data-toggle="modal"
+                                                data-target="#socialMediaModal{{ $video->id }}">
+                                                <i class="fa fa-share-alt"></i>
+                                            </button>
 
-                                                        @case('twitter')
-                                                            <img src="{{ asset('assets/img/brand/twitter.png') }}" alt="Twitter" class="img-fluid social-logo" style="width: 25px; height: 25px;">
-                                                            <!-- Twitter Blue -->
-                                                        @break
+                                            <!-- Social Media Modal -->
+                                            <div class="modal fade" id="socialMediaModal{{ $video->id }}"
+                                                tabindex="-1" role="dialog"
+                                                aria-labelledby="socialMediaModalLabel{{ $video->id }}"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title"
+                                                                id="socialMediaModalLabel{{ $video->id }}">Social Media
+                                                                Links</h5>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <!-- Container for Icons -->
+                                                            <div class="d-flex flex-wrap justify-content-center">
+                                                                @foreach ($video->businessUnit->socialMedia as $socialMedia)
+                                                                    <a href="{{ $socialMedia->social_media_link }}"
+                                                                        target="_blank" class="m-2">
+                                                                        @switch(strtolower($socialMedia->social_media_name))
+                                                                            @case('facebook')
+                                                                                <i class="fab fa-facebook"
+                                                                                    style="color: #3b5998; font-size: 36px;"></i>
+                                                                            @break
 
-                                                        @case('facebook')
-                                                            <i class="fab fa-facebook" style="color: #3b5998;"></i>
-                                                            <!-- Facebook Blue -->
-                                                        @break
+                                                                            @case('instagram')
+                                                                                <i class="fab fa-instagram"
+                                                                                    style="color: #E4405F; font-size: 36px;"></i>
+                                                                            @break
 
-                                                        @case('instagram')
-                                                            <i class="fab fa-instagram" style="color: #E4405F;"></i>
-                                                            <!-- Instagram Pink -->
-                                                        @break
+                                                                            @case('twitter')
+                                                                                <img src="{{ asset('assets/img/brand/twitter.png') }}"
+                                                                                    alt="Twitter"
+                                                                                    class="img-fluid social-logo me-2"
+                                                                                    style="width: 36px; height: 36px;">
+                                                                            @break
 
-                                                        @case('whatsapp')
-                                                            <i class="fab fa-whatsapp" style="color: #25D366;"></i>
-                                                            <!-- WhatsApp Green -->
-                                                        @break
+                                                                            @case('linkedin')
+                                                                                <i class="fab fa-linkedin"
+                                                                                    style="color: #0077b5; font-size: 36px;"></i>
+                                                                            @break
 
-                                                        @case('linkedin')
-                                                            <i class="fab fa-linkedin" style="color: #0077b5;"></i>
-                                                            <!-- LinkedIn Blue -->
-                                                        @break
+                                                                            @case('youtube')
+                                                                                <i class="fab fa-youtube"
+                                                                                    style="color: #FF0000; font-size: 36px;"></i>
+                                                                            @break
 
-                                                        @case('website')
-                                                            <i class="fas fa-globe" style="color: #0000FF;"></i>
-                                                            <!-- Website Blue -->
-                                                        @break
+                                                                            @case('website')
+                                                                                <i class="fas fa-globe"
+                                                                                    style="color: #0d6efd; font-size: 36px;"></i>
+                                                                                <!-- Changed icon color to blue -->
+                                                                            @break
 
-                                                        @default
-                                                            <i class="fab fa-share-alt" style="color: #6c757d;"></i>
-                                                            <!-- Default Grey -->
-                                                    @endswitch
-                                                </a>
-                                            @endforeach
+                                                                            @case('whatsapp')
+                                                                                <i class="fab fa-whatsapp"
+                                                                                    style="color: #25D366; font-size: 36px;"></i>
+                                                                                <!-- Changed icon color to WhatsApp green -->
+                                                                            @break
+
+                                                                            @default
+                                                                                <i class="fas fa-globe"
+                                                                                    style="color: #6c757d; font-size: 36px;"></i>
+                                                                        @endswitch
+                                                                    </a>
+                                                                @endforeach
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
                                         </td>
 
                                         <td class="d-flex justify-content-start">
@@ -560,23 +602,22 @@
         </script>
 
         <script>
-            $(document).on('submit', '#commentForm{{ $video->id }}', function (e) {
-    e.preventDefault(); // Prevent form submission
-    var form = $(this);
-    $.ajax({
-        type: 'POST',
-        url: form.attr('action'),
-        data: form.serialize(),
-        success: function (response) {
-            $('#commentModal{{ $video->id }}').modal('hide'); // Hide modal after saving
-            alert('Comment saved successfully!');
-            // Optionally, update the comment in the table or perform other actions
-        },
-        error: function (error) {
-            alert('Error saving comment. Please try again.');
-        }
-    });
-});
-
+            $(document).on('submit', '#commentForm{{ $video->id }}', function(e) {
+                e.preventDefault(); // Prevent form submission
+                var form = $(this);
+                $.ajax({
+                    type: 'POST',
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    success: function(response) {
+                        $('#commentModal{{ $video->id }}').modal('hide'); // Hide modal after saving
+                        alert('Comment saved successfully!');
+                        // Optionally, update the comment in the table or perform other actions
+                    },
+                    error: function(error) {
+                        alert('Error saving comment. Please try again.');
+                    }
+                });
+            });
         </script>
     @endsection

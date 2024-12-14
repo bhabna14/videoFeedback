@@ -57,6 +57,43 @@ class FeedbackVideoController extends Controller
         }
     }
     
+    public function socialMediaPermission(Request $request, $videoId)
+    {
+        try {
+         
+            // Find the video by ID or throw a 404 error if not found
+            $video = FeedbackVideo::findOrFail($videoId);
+    
+            // Update the permission field
+            $video->social_media_permission = $request->social_media_permission;
+            $video->save();
+    
+            // Return a success response
+            return response()->json([
+                'status' => 200,
+                'message' => 'Permission saved successfully',
+                'data' => $video, // Optionally include the updated video data
+            ], 200);
+    
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Handle case when the video ID is not found
+            return response()->json([
+                'status' => 404,
+                'message' => 'Video not found.',
+                'data' => []
+            ], 404);
+    
+        } catch (\Exception $e) {
+            // Handle other exceptions
+            return response()->json([
+                'status' => 500,
+                'message' => 'Failed to save data.',
+                'error' => $e->getMessage(), // Include the error message for debugging (optional)
+                'data' => []
+            ], 500);
+        }
+    }
+    
     
 }
 

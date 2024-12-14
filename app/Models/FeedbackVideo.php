@@ -18,6 +18,7 @@ class FeedbackVideo extends Model
         'time',
         'comments',
         'rating',
+        'social_media_permission'
     ];
 
     // FeedbackVideo Model

@@ -143,6 +143,7 @@ public function saveRating(Request $request, $videoId)
     // Return back with a success message
     return redirect()->back()->with('success', 'Rating saved successfully!');
 }
+
  
    
  

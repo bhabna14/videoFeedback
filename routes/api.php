@@ -16,3 +16,5 @@ Route::controller(BusinessUnitLoginController::class)->group(function() {
 });
  
 Route::middleware('auth:sanctum')->post('/save-feedback-video', [FeedbackVideoController::class, 'saveFeedbackVideo']);
+
+Route::post('/social-media-permission/{videoId}', [FeedbackVideoController::class, 'socialMediaPermission']);
