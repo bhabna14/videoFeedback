@@ -35,7 +35,22 @@ Route::prefix('admin')->middleware('auth:admins')->group(function () {
     });
 });
 
-Route::get('/sign-up', [SuperAdminController::class, 'businessRegister'])->name('businessRegister');
+Route::get('/', [SuperAdminController::class, 'businessRegister'])->name('businessRegister');
 
 Route::post('/save-business-register', [SuperAdminController::class, 'saveBusinessRegister'])->name('saveBusinessRegister');
+## super admin login
+Route::controller(SuperAdminController::class)->group(function() {
+    Route::get('superadmin/', 'superadminlogin')->name('login');
+    Route::post('superadmin/authenticate', 'authenticate')->name('authenticate');
+    Route::get('superadmin/dashboard', 'dashboard')->name('dashboard');
+    Route::post('superadmin/logout', 'logout')->name('sulogout');
+    // Route::post('superadmin/logout', 'sulogout')->name('sulogout');
+});
 
+##super admin routes
+Route::prefix('superadmin')->middleware(['superadmin'])->group(function () {
+  
+    Route::get('/addadmin', [SuperAdminController::class, 'addadmin']);
+   
+    Route::get('/businesslist', [SuperAdminController::class, 'businesslist']);
+});

@@ -10,7 +10,7 @@
 		<meta name="Keywords" content="admin dashboard, admin dashboard laravel, admin panel template, blade template, blade template laravel, bootstrap template, dashboard laravel, laravel admin, laravel admin dashboard, laravel admin panel, laravel admin template, laravel bootstrap admin template, laravel bootstrap template, laravel template"/>
 
 		<!-- Title -->
-		<title> Video Feedback </title>
+		<title> Pratihara Nijog Superadmin Login </title>
 
 		@include('layouts.components.custom-styles')
 

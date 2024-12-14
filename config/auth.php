@@ -21,6 +21,10 @@ return [
             'provider' => 'business-unit', // Matches your 'riders' provider
             'hash' => false,        // Set to true only if using hashed tokens
         ],
+        'superadmins' => [
+            'driver' => 'session',
+            'provider' => 'superadmins',
+        ],
     ],
 
     'providers' => [
@@ -36,6 +40,10 @@ return [
         'business-unit' => [
             'driver' => 'eloquent',
             'model' => App\Models\BusinessUnit::class,
+        ],
+        'superadmins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\SuperAdmin::class,
         ],
     ],
 
