@@ -8,7 +8,58 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<style>
+    /* Increase icon size */
+.social-icon {
+    font-size: 1.5rem; /* Adjust size as needed */
+    margin-right: 10px;
+}
 
+/* Specific colors for each social media platform */
+.facebook {
+    color: #3b5998;
+}
+
+.twitter {
+    color: #00aced;
+}
+
+.instagram {
+    color: #e4405f;
+}
+
+.linkedin {
+    color: #0077b5;
+}
+
+.youtube {
+    color: #ff0000;
+}
+
+.whatsapp {
+    color: #25d366;
+}
+
+.default {
+    color: #555555; /* Default color for unknown social media */
+}
+
+/* Additional styling for the list items */
+.list-group-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1rem;
+}
+
+.list-group-item a {
+    word-wrap: break-word;
+    text-decoration: none;
+    color: #0d6efd;
+}
+
+</style>
     <!-- INTERNAL Select2 css -->
     <link href="{{ asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet" />
 @endsection
@@ -82,14 +133,14 @@
                                                 View Address
                                             </button>
                                         </td>
+
                                         <td>
-                                            <button class="btn btn-dark social-media-btn"
-                                                onclick="showSocialMediaModal({{ $unit->id }})">
-                                                Social Media Link
+                                            <button class="btn btn-dark" data-bs-toggle="modal"
+                                                data-bs-target="#socialMediaModal{{ $unit->id }}">
+                                                Social Media
                                             </button>
-
-
                                         </td>
+
                                         <td>{{ $unit->status }}</td>
                                         <td>
                                             <form action="{{ route('admin.deleteBusinessUnit', $unit->id) }}"
@@ -107,6 +158,69 @@
                                         </td>
                                     </tr>
 
+                                    <!-- Modal for Social Media Links -->
+                                    <div class="modal fade" id="socialMediaModal{{ $unit->id }}" tabindex="-1"
+                                        aria-labelledby="socialMediaModalLabel{{ $unit->id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-primary text-white">
+                                                    <h5 class="modal-title" id="socialMediaModalLabel{{ $unit->id }}">
+                                                        <i class="fab fa-facebook"></i> Business Unit Social Media
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="p-3">
+                                                        @if ($unit->socialMediaLinks->isNotEmpty())
+                                                            <ul class="list-group">
+                                                                @foreach ($unit->socialMediaLinks as $socialMedia)
+                                                                    <li class="list-group-item d-flex align-items-center">
+                                                                        <strong class="me-3">
+                                                                            <!-- Dynamically display the social media icon with size and color -->
+                                                                            @switch(strtolower($socialMedia->social_media_name))
+                                                                                @case('facebook')
+                                                                                    <i class="fab fa-facebook-square social-icon facebook"></i> Facebook:
+                                                                                    @break
+                                                                                @case('twitter')
+                                                                                    <img src="{{ asset('assets/img/brand/twitter.png') }}" alt="Twitter" class="img-fluid social-logo" style="width: 25px; height: 25px;"> Twitter:
+                                                                                    @break
+                                                                                @case('instagram')
+                                                                                    <i class="fab fa-instagram-square social-icon instagram"></i> Instagram:
+                                                                                    @break
+                                                                                @case('linkedin')
+                                                                                    <i class="fab fa-linkedin social-icon linkedin"></i> LinkedIn:
+                                                                                    @break
+                                                                                @case('youtube')
+                                                                                    <i class="fab fa-youtube-square social-icon youtube"></i> YouTube:
+                                                                                    @break
+                                                                                @case('whatsapp')
+                                                                                    <i class="fab fa-whatsapp social-icon whatsapp"></i> WhatsApp:
+                                                                                    @break
+                                                                                @default
+                                                                                    <i class="fas fa-share-alt social-icon default"></i> {{ $socialMedia->social_media_name }}:
+                                                                            @endswitch
+                                                                        </strong>
+                                                                        <a href="{{ $socialMedia->social_media_link }}" style="font-size: 15px" target="_blank" class="text-primary">
+                                                                            {{ $socialMedia->social_media_link }}
+                                                                        </a>
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        @else
+                                                            <p>No social media links available.</p>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer bg-light">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                        Close
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
 
                                     <!-- Modal for Address Details -->
                                     <div class="modal fade" id="addressModal{{ $unit->id }}" tabindex="-1"
@@ -126,13 +240,16 @@
                                                                 Address:</strong>
                                                             <span class="text-dark">{{ $unit->full_address }}</span>
                                                         </p>
-                                                        <p class="mb-2"><strong class="text-secondary">Locality:</strong>
+                                                        <p class="mb-2"><strong
+                                                                class="text-secondary">Locality:</strong>
                                                             <span class="text-dark">{{ $unit->locality }}</span>
                                                         </p>
-                                                        <p><strong class="text-secondary">Pincode:</strong>
+                                                        <p class="mb-2">
+                                                            <strong class="text-secondary">Pincode:</strong>
                                                             <span class="text-dark">{{ $unit->pincode }}</span>
                                                         </p>
-                                                        <p class="mb-2"><strong class="text-secondary">City:</strong>
+                                                        <p class="mb-2">
+                                                            <strong class="text-secondary">City:</strong>
                                                             <span class="text-dark">{{ $unit->city }}</span>
                                                         </p>
                                                         <p class="mb-2"><strong class="text-secondary">State:</strong>
@@ -156,33 +273,6 @@
                                 @endforeach
                             </tbody>
                         </table>
-
-
-                        <!-- Single Reusable Modal for Social Media -->
-                        <div class="modal fade" id="socialMediaModal" tabindex="-1"
-                            aria-labelledby="socialMediaModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header bg-primary text-white">
-                                        <h5 class="modal-title" id="socialMediaModalLabel">
-                                            <i class="fas fa-share-alt"></i> Social Media Links
-                                        </h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div id="socialMediaContent" class="p-3">
-                                            <!-- Social media links will be populated here -->
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer bg-light">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
 
                     </div>
                 </div>
@@ -236,55 +326,5 @@
                 }
             });
         }
-    </script>
-    <script>
-    function fetchSocialMediaLinks(businessUnitId) {
-    // Define the API endpoint to fetch social media links
-    const apiUrl = `/admin/get-social-media-links?businessUnitId=${businessUnitId}`;
-
-    // Show a loading indicator while the data is being fetched
-    document.getElementById('socialMediaContent').innerHTML = '<p>Loading...</p>';
-    new bootstrap.Modal(document.getElementById('socialMediaModal')).show();
-
-    // Fetch social media links from the API
-    fetch(apiUrl)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then((data) => {
-            // Handle the case when no links are returned
-            if (!data.links || data.links.length === 0) {
-                document.getElementById('socialMediaContent').innerHTML = '<p>No social media links available.</p>';
-            } else {
-                // Populate the modal with social media links
-                let contentHtml = '<ul class="list-group">';
-                data.links.forEach((link) => {
-                    contentHtml += `
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span>${link.platform}</span>
-                            <a href="${link.url}" target="_blank" class="btn btn-sm btn-primary">
-                                Visit <i class="fas fa-external-link-alt"></i>
-                            </a>
-                        </li>`;
-                });
-                contentHtml += '</ul>';
-                document.getElementById('socialMediaContent').innerHTML = contentHtml;
-            }
-        })
-        .catch((error) => {
-            console.error('Error fetching social media links:', error);
-            document.getElementById('socialMediaContent').innerHTML =
-                '<p>Failed to load social media links. Please try again later.</p>';
-        });
-}
-
-// Call this function when a social media button is clicked
-function showSocialMediaModal(businessUnitId) {
-    fetchSocialMediaLinks(businessUnitId);
-}
-
     </script>
 @endsection

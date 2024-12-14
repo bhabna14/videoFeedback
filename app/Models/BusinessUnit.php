@@ -40,8 +40,8 @@ class BusinessUnit extends Model
     }
     
     public function socialMedia()
-{
+   {
     return $this->hasMany(BusinessUnitSocialMedia::class, 'business_unit_id', 'business_unit_id');
-}
+   }
 
 }

@@ -206,22 +206,37 @@
                                             </form>
                                         </td>
                                         <td>
-                                            <!-- Comment Input Field -->
-                                            <form action="{{ route('admin.saveComment', $video->id) }}" method="POST"
-                                                id="commentForm{{ $video->id }}">
-                                                @csrf
-                                                <div class="d-flex align-items-center">
-                                                    <!-- Input Field -->
-                                                    <input type="text" name="comments"
-                                                        class="form-control form-control-sm mr-2"
-                                                        placeholder="Add a comment" value="{{ $video->comments }}">
-
-                                                    <!-- Save Button -->
-                                                    <button type="submit" class="btn btn-sm btn-success">Save</button>
+                                            <!-- Add Comment Button -->
+                                            <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#commentModal{{ $video->id }}">
+                                                <i class="fa fa-edit"></i>
+                                            </button>
+                                        
+                                            <!-- Modal for adding comment -->
+                                            <div class="modal fade" id="commentModal{{ $video->id }}" tabindex="-1" role="dialog"
+                                                aria-labelledby="commentModalLabel{{ $video->id }}" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="commentModalLabel{{ $video->id }}">Add Comment for Video</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <!-- Comment Form -->
+                                                            <form action="{{ route('admin.saveComment', $video->id) }}" method="POST" id="commentForm{{ $video->id }}">
+                                                                @csrf
+                                                                <div class="form-group">
+                                                                    <textarea name="comments" class="form-control" placeholder="Enter your comment" rows="4">{{ $video->comments }}</textarea>
+                                                                </div>
+                                                                <button type="submit" class="btn btn-success">Save Comment</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </form>
+                                            </div>
                                         </td>
-
+                                        
 
 
                                         <td>
@@ -235,7 +250,7 @@
                                                         @break
 
                                                         @case('twitter')
-                                                            <i class="fab fa-twitter" style="color: #1DA1F2;"></i>
+                                                            <img src="{{ asset('assets/img/brand/twitter.png') }}" alt="Twitter" class="img-fluid social-logo" style="width: 25px; height: 25px;">
                                                             <!-- Twitter Blue -->
                                                         @break
 
@@ -542,5 +557,26 @@
                     errorMessage.style.display = 'none';
                 }
             }, 5000); // 5000ms = 5 seconds
+        </script>
+
+        <script>
+            $(document).on('submit', '#commentForm{{ $video->id }}', function (e) {
+    e.preventDefault(); // Prevent form submission
+    var form = $(this);
+    $.ajax({
+        type: 'POST',
+        url: form.attr('action'),
+        data: form.serialize(),
+        success: function (response) {
+            $('#commentModal{{ $video->id }}').modal('hide'); // Hide modal after saving
+            alert('Comment saved successfully!');
+            // Optionally, update the comment in the table or perform other actions
+        },
+        error: function (error) {
+            alert('Error saving comment. Please try again.');
+        }
+    });
+});
+
         </script>
     @endsection

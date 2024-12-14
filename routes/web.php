@@ -13,10 +13,10 @@ Route::prefix('admin')->group(function () {
     Route::get('/business-login', [AdminController::class, 'showLoginForm'])->name('admin.login');
     Route::post('/dash-board', [AdminController::class, 'login'])->name('admin.login.post');
     Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
-Route::post('/disable-video-feedback/{id}',[AdminController::class,'disableVideoFeedback'])->name('admin.disableVideoFeedback');
-Route::post('/delete-video-feedback/{id}',[AdminController::class,  'deleteVideoFeedback'])->name('admin.deleteVideoFeedback');
-Route::post('feedback-video/{videoId}/save-comment', [AdminController::class, 'saveComment'])->name('admin.saveComment');
-Route::post('feedback-video/{videoId}/save-rating', [AdminController::class, 'saveRating'])->name('admin.saveRating');
+    Route::post('/disable-video-feedback/{id}',[AdminController::class,'disableVideoFeedback'])->name('admin.disableVideoFeedback');
+    Route::post('/delete-video-feedback/{id}',[AdminController::class,  'deleteVideoFeedback'])->name('admin.deleteVideoFeedback');
+    Route::post('feedback-video/{videoId}/save-comment', [AdminController::class, 'saveComment'])->name('admin.saveComment');
+    Route::post('feedback-video/{videoId}/save-rating', [AdminController::class, 'saveRating'])->name('admin.saveRating');
 
 
 });
@@ -24,14 +24,13 @@ Route::post('feedback-video/{videoId}/save-rating', [AdminController::class, 'sa
 Route::prefix('admin')->middleware('auth:admins')->group(function () {
     Route::get('/dash-board', [AdminController::class, 'showDashboard'])->name('admin.dashboard');
     
-    Route::controller(BusinessUnitController::class)->group(function() {
+        Route::controller(BusinessUnitController::class)->group(function() {
         Route::get('/add-business-unit', 'showBusinessUnit')->name('addBusinessUnit');
         Route::post('/save-business-unit','saveBusinessUnit')->name('admin.save-business-unit');
         Route::get('/manage-business-unit', 'manageBusinessUnit')->name('manageBusinessUnit');
         Route::post('/delete-business-unit/{id}',  'deleteBusinessUnit')->name('admin.deleteBusinessUnit');
         Route::get('/edit-business-unit/{id}', 'editBusinessUnit')->name('admin.edit-business-unit');
         Route::put('/update-business-unit/{id}', 'updateBusinessUnit')->name('admin.update-business-unit');
-        Route::get('/get-social-media-links/{id}', 'getSocialMediaLinks');
     });
 });
 

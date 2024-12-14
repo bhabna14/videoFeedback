@@ -99,38 +99,18 @@ class BusinessUnitController extends Controller
     }
     
     public function manageBusinessUnit()
-    {
-        // Fetch all business units along with their social media links
-        $businessUnits = BusinessUnit::where('status', 'active')->get();
-            
-    
-        // Return the view and pass the business units to it
-        return view('admin/manage-business-unit', compact('businessUnits'));
-    }
+{
+    $business_id = Auth::guard('admins')->user()->business_id;
 
-    public function getSocialMediaLinks(Request $request)
-    {
-        $businessUnitId = $request->query('businessUnitId');
-    
-        // Log the request to ensure businessUnitId is being passed correctly
-        \Log::info("Fetching social media links for business unit ID: " . $businessUnitId);
-    
-        // Check if the businessUnitId exists in the database
-        $socialMediaLinks = BusinessUnitSocialMedia::where('business_unit_id', $businessUnitId)
-            ->where('status', 'active') // Optional, only fetch active social media links
-            ->get(['social_media_name as platform', 'social_media_link as url']);
-    
-        // Log the fetched social media links
-        \Log::info("Fetched social media links: " . json_encode($socialMediaLinks));
-    
-        // If no links are found, return an empty array
-        if ($socialMediaLinks->isEmpty()) {
-            return response()->json(['links' => []], 200);
-        }
-    
-        return response()->json(['links' => $socialMediaLinks], 200);
-    }
-    
+    $businessUnits = BusinessUnit::where('status', 'active')
+                                  ->where('business_id', $business_id)
+                                  ->with('socialMediaLinks') // Eager load social media links
+                                  ->get();
+         
+    return view('admin/manage-business-unit', compact('businessUnits'));
+}
+
+   
 
 public function deleteBusinessUnit(Request $request, $id)
 {
@@ -150,10 +130,11 @@ public function deleteBusinessUnit(Request $request, $id)
 public function editBusinessUnit($id)
 {
     $businessUnit = BusinessUnit::findOrFail($id); // Fetch the specific business unit
+    // Get current social media links (if any)
+    $socialMediaLinks = $businessUnit->socialMediaLinks()->pluck('social_media_link', 'social_media_name')->toArray();
 
-    return view('admin.edit-business-unit', compact('businessUnit'));
+    return view('admin.edit-business-unit', compact('businessUnit', 'socialMediaLinks'));
 }
-
 public function updateBusinessUnit(Request $request, $id)
 {
     $request->validate([
@@ -170,6 +151,7 @@ public function updateBusinessUnit(Request $request, $id)
         'state' => 'nullable|string|max:255',
         'country' => 'nullable|string|max:255',
         'full_address' => 'nullable|string',
+        'social_media' => 'nullable|array', // Add validation for social media
     ]);
 
     try {
@@ -181,7 +163,6 @@ public function updateBusinessUnit(Request $request, $id)
             $businessLogoPath = $businessLogo->store('uploads/business_logos', 'public');
             $businessUnit->business_logo = $businessLogoPath;
         }
-        
 
         $businessUnit->mobile_number = $request->mobile_number;
         $businessUnit->whatsapp_number = $request->whatsapp_number;
@@ -190,7 +171,7 @@ public function updateBusinessUnit(Request $request, $id)
         if ($request->filled('password')) {
             $businessUnit->password = bcrypt($request->password); // Remember to hash the password before saving
         }
-        
+
         $businessUnit->locality = $request->locality;
         $businessUnit->pincode = $request->pincode;
         $businessUnit->city = $request->city;
@@ -201,11 +182,30 @@ public function updateBusinessUnit(Request $request, $id)
 
         $businessUnit->save();
 
+        // Handle social media URLs (update or create new entries)
+        if ($request->filled('social_media')) {
+            foreach ($request->input('social_media', []) as $platform => $url) {
+                $socialMedia = $businessUnit->socialMediaLinks()->where('social_media_name', $platform)->first();
+
+                if ($socialMedia) {
+                    // If the social media entry exists, update it
+                    $socialMedia->update(['social_media_link' => $url]);
+                } else {
+                    // If it doesn't exist, create a new entry
+                    $businessUnit->socialMediaLinks()->create([
+                        'social_media_name' => $platform,
+                        'social_media_link' => $url,
+                    ]);
+                }
+            }
+        }
+
         return redirect()->route('manageBusinessUnit')->with('success', 'Business Unit updated successfully!');
     } catch (\Exception $e) {
         \Log::error('Error updating business unit: ' . $e->getMessage());
         return back()->withErrors(['danger' => 'An error occurred while updating the business unit.']);
     }
 }
+
 
 }

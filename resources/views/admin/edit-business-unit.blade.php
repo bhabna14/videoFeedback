@@ -114,6 +114,70 @@
             </div>
         </div>
 
+        <div class="col-12 mb-3">
+            <label for="social_media" class="form-label">Social Media Links</label>
+            <div class="card">
+                <div class="card-header">
+                    <h5>SOCIAL MEDIA</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4 justify-content-center">
+                        <!-- Instagram -->
+                        <div class="col-md-4 col-sm-6 text-center">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ asset('assets/img/brand/instagram.png') }}" alt="Instagram" class="img-fluid social-logo me-2" style="width: 40px; height: 40px;">
+                                <input type="text" class="form-control" placeholder="Instagram URL" name="social_media[instagram]" value="{{ old('social_media.instagram', $socialMediaLinks['instagram'] ?? '') }}">
+                            </div>
+                        </div>
+                        <!-- Facebook -->
+                        <div class="col-md-4 col-sm-6 text-center">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ asset('assets/img/brand/facebook.png') }}" alt="Facebook" class="img-fluid social-logo me-2" style="width: 40px; height: 40px;">
+                                <input type="text" class="form-control" placeholder="Facebook URL" name="social_media[facebook]" value="{{ old('social_media.facebook', $socialMediaLinks['facebook'] ?? '') }}">
+                            </div>
+                        </div>
+                        <!-- WhatsApp -->
+                        <div class="col-md-4 col-sm-6 text-center">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ asset('assets/img/brand/whatsapp.png') }}" alt="WhatsApp" class="img-fluid social-logo me-2" style="width: 40px; height: 40px;">
+                                <input type="text" class="form-control" placeholder="WhatsApp URL" name="social_media[whatsapp]" value="{{ old('social_media.whatsapp', $socialMediaLinks['whatsapp'] ?? '') }}">
+                            </div>
+                        </div>
+                        <!-- LinkedIn -->
+                        <div class="col-md-4 col-sm-6 text-center">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ asset('assets/img/brand/linkedin.png') }}" alt="LinkedIn" class="img-fluid social-logo me-2" style="width: 40px; height: 40px;">
+                                <input type="text" class="form-control" placeholder="LinkedIn URL" name="social_media[linkedin]" value="{{ old('social_media.linkedin', $socialMediaLinks['linkedin'] ?? '') }}">
+                            </div>
+                        </div>
+                        <!-- YouTube -->
+                        <div class="col-md-4 col-sm-6 text-center">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ asset('assets/img/brand/youtube.png') }}" alt="YouTube" class="img-fluid social-logo me-2" style="width: 40px; height: 40px;">
+                                <input type="text" class="form-control" placeholder="YouTube URL" name="social_media[youtube]" value="{{ old('social_media.youtube', $socialMediaLinks['youtube'] ?? '') }}">
+                            </div>
+                        </div>
+                        <!-- Twitter -->
+                        <div class="col-md-4 col-sm-6 text-center">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ asset('assets/img/brand/twitter.png') }}" alt="Twitter" class="img-fluid social-logo me-2" style="width: 40px; height: 40px;">
+                                <input type="text" class="form-control" placeholder="Twitter URL" name="social_media[twitter]" value="{{ old('social_media.twitter', $socialMediaLinks['twitter'] ?? '') }}">
+                            </div>
+                        </div>
+                        <!-- Website -->
+                        <div class="col-md-4 col-sm-6 text-center">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ asset('assets/img/brand/web-link.png') }}" alt="Website" class="img-fluid social-logo me-2" style="width: 40px; height: 40px;">
+                                <input type="text" class="form-control" placeholder="Website URL" name="social_media[website]" value="{{ old('social_media.website', $socialMediaLinks['website'] ?? '') }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+
         <div class="col-12 mt-4">
             <button type="submit" class="btn btn-primary w-100">Update</button>
         </div>

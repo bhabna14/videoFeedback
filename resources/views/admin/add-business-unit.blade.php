@@ -162,47 +162,54 @@
                         <h5>SOCIAL MEDIA</h5>
                     </div>
                     <div class="card-body">
-                        <div class="row justify-content-center mt-4">
+                        <div class="row g-4 justify-content-center">
                             <!-- Instagram -->
-                            <div class="col-md-2 text-center">
-                                <div class="d-flex justify-content-center">
-                                    <img src="{{ asset('assets/img/brand/instagram.png') }}" alt="Instagram" class="img-fluid social-logo">
-                                    <input type="text" class="form-control ml-2" placeholder="Instagram URL" name="social_media[instagram]">
+                            <div class="col-md-4 col-sm-6 text-center">
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ asset('assets/img/brand/instagram.png') }}" alt="Instagram" class="img-fluid social-logo me-2" style="width: 40px; height: 40px;">
+                                    <input type="text" class="form-control" placeholder="Instagram URL" name="social_media[instagram]">
                                 </div>
                             </div>
                             <!-- Facebook -->
-                            <div class="col-md-2 text-center">
-                                <div class="d-flex justify-content-center">
-                                    <img src="{{ asset('assets/img/brand/facebook.png') }}" alt="Facebook" class="img-fluid social-logo">
-                                    <input type="text" class="form-control ml-2" placeholder="Facebook URL" name="social_media[facebook]">
+                            <div class="col-md-4 col-sm-6 text-center">
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ asset('assets/img/brand/facebook.png') }}" alt="Facebook" class="img-fluid social-logo me-2" style="width: 40px; height: 40px;">
+                                    <input type="text" class="form-control" placeholder="Facebook URL" name="social_media[facebook]">
                                 </div>
                             </div>
                             <!-- WhatsApp -->
-                            <div class="col-md-2 text-center">
-                                <div class="d-flex justify-content-center">
-                                    <img src="{{ asset('assets/img/brand/whatsapp.png') }}" alt="WhatsApp" class="img-fluid social-logo">
-                                    <input type="text" class="form-control ml-2" placeholder="WhatsApp URL" name="social_media[whatsapp]">
+                            <div class="col-md-4 col-sm-6 text-center">
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ asset('assets/img/brand/whatsapp.png') }}" alt="WhatsApp" class="img-fluid social-logo me-2" style="width: 40px; height: 40px;">
+                                    <input type="text" class="form-control" placeholder="WhatsApp URL" name="social_media[whatsapp]">
                                 </div>
                             </div>
                             <!-- LinkedIn -->
-                            <div class="col-md-2 text-center">
-                                <div class="d-flex justify-content-center">
-                                    <img src="{{ asset('assets/img/brand/linkedin.png') }}" alt="LinkedIn" class="img-fluid social-logo">
-                                    <input type="text" class="form-control ml-2" placeholder="LinkedIn URL" name="social_media[linkedin]">
+                            <div class="col-md-4 col-sm-6 text-center">
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ asset('assets/img/brand/linkedin.png') }}" alt="LinkedIn" class="img-fluid social-logo me-2" style="width: 40px; height: 40px;">
+                                    <input type="text" class="form-control" placeholder="LinkedIn URL" name="social_media[linkedin]">
                                 </div>
                             </div>
                             <!-- YouTube -->
-                            <div class="col-md-2 text-center">
-                                <div class="d-flex justify-content-center">
-                                    <img src="{{ asset('assets/img/brand/youtube.png') }}" alt="YouTube" class="img-fluid social-logo">
-                                    <input type="text" class="form-control ml-2" placeholder="YouTube URL" name="social_media[youtube]">
+                            <div class="col-md-4 col-sm-6 text-center">
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ asset('assets/img/brand/youtube.png') }}" alt="YouTube" class="img-fluid social-logo me-2" style="width: 40px; height: 40px;">
+                                    <input type="text" class="form-control" placeholder="YouTube URL" name="social_media[youtube]">
                                 </div>
                             </div>
                             <!-- Twitter -->
-                            <div class="col-md-2 text-center">
-                                <div class="d-flex justify-content-center">
-                                    <img src="{{ asset('assets/img/brand/twitter.png') }}" alt="Twitter" class="img-fluid social-logo">
-                                    <input type="text" class="form-control ml-2" placeholder="Twitter URL" name="social_media[twitter]">
+                            <div class="col-md-4 col-sm-6 text-center">
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ asset('assets/img/brand/twitter.png') }}" alt="Twitter" class="img-fluid social-logo me-2" style="width: 40px; height: 40px;">
+                                    <input type="text" class="form-control" placeholder="Twitter URL" name="social_media[twitter]">
+                                </div>
+                            </div>
+                            <!-- Website -->
+                            <div class="col-md-4 col-sm-6 text-center">
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ asset('assets/img/brand/web-link.png') }}" alt="Website" class="img-fluid social-logo me-2" style="width: 40px; height: 40px;">
+                                    <input type="text" class="form-control" placeholder="Website URL" name="social_media[website]">
                                 </div>
                             </div>
                         </div>

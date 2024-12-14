@@ -18,4 +18,5 @@ class BusinessUnitSocialMedia extends Model
         'social_media_link',
     ];
 
+    
 }

@@ -26,5 +26,10 @@ public function businessUnit()
     return $this->belongsTo(BusinessUnit::class, 'business_unit_id', 'business_unit_id');
 }
 
+public function socialMedia()
+{
+    return $this->hasMany(BusinessUnitSocialMedia::class, 'business_unit_id');
+}
+
 
 }
