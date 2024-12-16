@@ -10,6 +10,7 @@
     <link href="{{ asset('assets/plugins/datatable/responsive.bootstrap5.css') }}" rel="stylesheet" />
 
     <style>
+
         .social-media-icon {
             font-size: 24px;
             margin-right: 10px;
@@ -43,6 +44,51 @@
             color: #6c757d;
         }
     </style>
+    <style>
+        .chat-container {
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+    
+        .chat-message {
+            display: flex;
+            flex-direction: column;
+            margin: 10px 0;
+            max-width: 60%;
+            padding: 10px;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 14px;
+            position: relative;
+        }
+    
+        .chat-left {
+            background: #f70258;
+            align-self: flex-start;
+        }
+    
+        .chat-right {
+            background: #0407a3;
+            align-self: flex-end;
+        }
+    
+        .chat-text {
+            margin: 0;
+            word-wrap: break-word;
+        }
+    
+        .chat-time {
+            font-size: 12px;
+            color: #ccc;
+            margin-top: 5px;
+            text-align: right;
+        }
+    </style>
+    
 @endsection
 
 @section('content')
@@ -181,209 +227,183 @@
                                         <td>{{ \Carbon\Carbon::parse($video->date)->format('d-m-Y') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($video->time)->format('h:i A') }}</td>
                                         <td>
-                                            <button class="btn btn-sm btn-warning" data-toggle="modal"
-                                                data-target="#videoModal"
-                                                onclick="openVideoModal('{{ asset('storage/' . $video->feedback_video) }}')">
+                                            <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#videoModal" onclick="openVideoModal('{{ asset('storage/' . $video->feedback_video) }}')">
                                                 View Video
                                             </button>
                                         </td>
-
                                         <td>
-                                            <!-- Like and Dislike Buttons -->
-                                            <form action="{{ route('admin.saveRating', $video->id) }}" method="POST"
-                                                id="ratingForm{{ $video->id }}">
+                                            <form action="{{ route('admin.saveRating', $video->id) }}" method="POST" id="ratingForm{{ $video->id }}">
                                                 @csrf
-                                                <button type="submit" name="rating" value="like"
-                                                    class="btn btn-sm {{ $video->rating == 'like' ? 'btn-success' : 'btn-light' }}"
-                                                    id="likeBtn{{ $video->id }}">
+                                                <button type="submit" name="rating" value="like" class="btn btn-sm {{ $video->rating == 'like' ? 'btn-success' : 'btn-light' }}" id="likeBtn{{ $video->id }}">
                                                     <i class="fa fa-thumbs-up"></i>
                                                 </button>
-                                                <button type="submit" name="rating" value="dislike"
-                                                    class="btn btn-sm {{ $video->rating == 'dislike' ? 'btn-danger' : 'btn-light' }}"
-                                                    id="dislikeBtn{{ $video->id }}">
+                                                <button type="submit" name="rating" value="dislike" class="btn btn-sm {{ $video->rating == 'dislike' ? 'btn-danger' : 'btn-light' }}" id="dislikeBtn{{ $video->id }}">
                                                     <i class="fa fa-thumbs-down"></i>
                                                 </button>
                                             </form>
                                         </td>
                                         <td>
-                                            <!-- Add Comment Button -->
-                                            <button class="btn btn-sm btn-primary" data-toggle="modal"
-                                                data-target="#commentModal{{ $video->id }}">
+                                            <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#commentModal{{ $video->id }}">
                                                 <i class="fa fa-edit"></i>
                                             </button>
-
-                                            <!-- Modal for adding comment -->
-                                            <div class="modal fade" id="commentModal{{ $video->id }}" tabindex="-1"
-                                                role="dialog" aria-labelledby="commentModalLabel{{ $video->id }}"
-                                                aria-hidden="true">
+                                    
+                                            <button class="btn btn-sm" style="background-color: hsl(60, 94%, 49%)" data-toggle="modal" data-target="#showCommentModal{{ $video->id }}">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                    
+                                            <!-- Add Comment Modal -->
+                                            <div class="modal fade" id="commentModal{{ $video->id }}" tabindex="-1" role="dialog">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title"
-                                                                id="commentModalLabel{{ $video->id }}">Add Comment for
-                                                                Video</h5>
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
+                                                            <h5 class="modal-title">Add Comment for Video</h5>
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <!-- Comment Form -->
-                                                            <form action="{{ route('admin.saveComment', $video->id) }}"
-                                                                method="POST" id="commentForm{{ $video->id }}">
+                                                            <form action="{{ route('admin.saveComment', $video->id) }}" method="POST">
                                                                 @csrf
                                                                 <div class="form-group">
-                                                                    <textarea name="comments" class="form-control" placeholder="Enter your comment" rows="4">{{ $video->comments }}</textarea>
+                                                                    <textarea name="comments" class="form-control" rows="4" placeholder="Enter your comment"></textarea>
                                                                 </div>
-                                                                <button type="submit" class="btn btn-success">Save
-                                                                    Comment</button>
+                                                                <button type="submit" class="btn btn-success">Save Comment</button>
                                                             </form>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </td>
-
-
-
-                                        <td>
-                                            @foreach ($video->businessUnit->socialMedia as $socialMedia)
-                                                <a href="{{ $socialMedia->social_media_link }}" target="_blank"
-                                                    class="social-media-icon" style="font-size: 24px; margin-right: 5px;">
-                                                    @switch(strtolower($socialMedia->social_media_name))
-                                                        @case('youtube')
-                                                            <i class="fab fa-youtube" style="color: #FF0000;"></i>
-                                                            <!-- YouTube Red -->
-                                                        @break
-
-                                                        @case('twitter')
-                                                            <i class="fab fa-twitter" style="color: #1DA1F2;"></i>
-                                                            <!-- Twitter Blue -->
-                                                        @break
-
-                                                        @case('facebook')
-                                                            <i class="fab fa-facebook" style="color: #3b5998;"></i>
-                                                            <!-- Facebook Blue -->
-                                                        @break
-
-                                                                            @case('instagram')
-                                                                                <i class="fab fa-instagram"
-                                                                                    style="color: #E4405F; font-size: 36px;"></i>
-                                                                            @break
-
-                                                                            @case('twitter')
-                                                                                <img src="{{ asset('assets/img/brand/twitter.png') }}"
-                                                                                    alt="Twitter"
-                                                                                    class="img-fluid social-logo me-2"
-                                                                                    style="width: 36px; height: 36px;">
-                                                                            @break
-
-                                                                            @case('linkedin')
-                                                                                <i class="fab fa-linkedin"
-                                                                                    style="color: #0077b5; font-size: 36px;"></i>
-                                                                            @break
-
-                                                                            @case('youtube')
-                                                                                <i class="fab fa-youtube"
-                                                                                    style="color: #FF0000; font-size: 36px;"></i>
-                                                                            @break
-
-                                                                            @case('website')
-                                                                                <i class="fas fa-globe"
-                                                                                    style="color: #0d6efd; font-size: 36px;"></i>
-                                                                                <!-- Changed icon color to blue -->
-                                                                            @break
-
-                                                                            @case('whatsapp')
-                                                                                <i class="fab fa-whatsapp"
-                                                                                    style="color: #25D366; font-size: 36px;"></i>
-                                                                                <!-- Changed icon color to WhatsApp green -->
-                                                                            @break
-
-                                                                            @default
-                                                                                <i class="fas fa-globe"
-                                                                                    style="color: #6c757d; font-size: 36px;"></i>
-                                                                        @endswitch
-                                                                    </a>
+                                    
+                                            <!-- Show Comments Modal -->
+                                            <div class="modal fade" id="showCommentModal{{ $video->id }}" tabindex="-1" role="dialog">
+                                                <div class="modal-dialog modal-lg" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Comments for Video</h5>
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            @if ($video->feedbackFollowUp && $video->feedbackFollowUp->isNotEmpty())
+                                                            <div class="chat-container">
+                                                                @foreach ($video->feedbackFollowUp as $key => $followUp)
+                                                                <div class="chat-message {{ $key % 2 == 0 ? 'chat-left' : 'chat-right' }}">
+                                                                    <p class="chat-text">{{ $followUp->comments }}</p>
+                                                                    <span class="chat-time">
+                                                                        {{ \Carbon\Carbon::parse($followUp->date)->format('d-m-Y') }} at 
+                                                                        {{ \Carbon\Carbon::parse($followUp->time)->format('h:i A') }}
+                                                                    </span>
+                                                                </div>
                                                                 @endforeach
-
                                                             </div>
+                                                            @else
+                                                            <p>No comments available for this video.</p>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-
-
                                         </td>
-
+                                        <td>
+                                            <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#socialMediaModal{{ $video->id }}">
+                                                <i class="fa fa-share-alt"></i>
+                                            </button>
+                                            <div class="modal fade" id="socialMediaModal{{ $video->id }}" tabindex="-1" role="dialog" aria-labelledby="socialMediaModalLabel{{ $video->id }}" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="socialMediaModalLabel{{ $video->id }}">Social Media Links</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            @if ($video->social_media_permission === 'yes')
+                                                                <div class="d-flex flex-wrap justify-content-center">
+                                                                    @foreach ($video->businessUnit->socialMedia as $socialMedia)
+                                                                        <a href="{{ $socialMedia->social_media_link }}" target="_blank" class="m-2">
+                                                                            @switch(strtolower($socialMedia->social_media_name))
+                                                                                @case('facebook')
+                                                                                    <i class="fab fa-facebook" style="color: #3b5998; font-size: 36px;"></i>
+                                                                                    @break
+                                                                                @case('instagram')
+                                                                                    <i class="fab fa-instagram" style="color: #E4405F; font-size: 36px;"></i>
+                                                                                    @break
+                                                                                @case('twitter')
+                                                                                    <img src="{{ asset('assets/img/brand/twitter.png') }}" alt="Twitter" class="img-fluid social-logo me-2" style="width: 36px; height: 36px;">
+                                                                                    @break
+                                                                                @case('linkedin')
+                                                                                    <i class="fab fa-linkedin" style="color: #0077b5; font-size: 36px;"></i>
+                                                                                    @break
+                                                                                @case('youtube')
+                                                                                    <i class="fab fa-youtube" style="color: #FF0000; font-size: 36px;"></i>
+                                                                                    @break
+                                                                                @case('website')
+                                                                                    <i class="fas fa-globe" style="color: #0d6efd; font-size: 36px;"></i>
+                                                                                    @break
+                                                                                @case('whatsapp')
+                                                                                    <i class="fab fa-whatsapp" style="color: #25D366; font-size: 36px;"></i>
+                                                                                    @break
+                                                                                @default
+                                                                                    <i class="fas fa-globe" style="color: #6c757d; font-size: 36px;"></i>
+                                                                            @endswitch
+                                                                        </a>
+                                                                    @endforeach
+                                                                </div>
+                                                            @else
+                                                                <div class="alert alert-danger text-center">
+                                                                    <strong>Sharing on social media is not allowed for this video.</strong>
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td class="d-flex justify-content-start">
-                                            <!-- Disable Video -->
-                                            <form action="{{ route('admin.disableVideoFeedback', $video->id) }}"
-                                                method="POST" id="disabledForm{{ $video->id }}">
+                                            <form action="{{ route('admin.disableVideoFeedback', $video->id) }}" method="POST" id="disabledForm{{ $video->id }}">
                                                 @csrf
-                                                <button type="button" class="btn btn-md btn-dark mr-2"
-                                                    onclick="confirmDisabled({{ $video->id }})">
+                                                <button type="button" class="btn btn-md btn-dark mr-2" onclick="confirmDisabled({{ $video->id }})">
                                                     <i class="fa fa-eye-slash"></i>
                                                 </button>
                                             </form>
-
-                                            <!-- Delete Video -->
-                                            <form action="{{ route('admin.deleteVideoFeedback', $video->id) }}"
-                                                method="POST" id="deleteForm{{ $video->id }}">
+                                            <form action="{{ route('admin.deleteVideoFeedback', $video->id) }}" method="POST" id="deleteForm{{ $video->id }}">
                                                 @csrf
-                                                <button type="button" class="btn btn-md btn-danger"
-                                                    style="margin-left: 5px"
-                                                    onclick="confirmDelete({{ $video->id }})">
+                                                <button type="button" class="btn btn-md btn-danger" style="margin-left: 5px" onclick="confirmDelete({{ $video->id }})">
                                                     <i class="fa fa-trash"></i>
                                                 </button>
                                             </form>
                                         </td>
                                     </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="5">No feedback videos available</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-
-                            </table>
-
-                            <!-- Modal for Video -->
-                            <div class="modal fade" id="videoModal" tabindex="-1" role="dialog"
-                                aria-labelledby="videoModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-sm" role="document">
-                                    <div class="modal-content">
-
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="videoModalLabel">Video</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-
-                                        <div class="modal-body">
-                                            <!-- Video Player -->
-                                            <video id="videoPlayer" controls class="w-100">
-                                                <source id="videoSource" src="" type="video/mp4">
-                                                Your browser does not support the video tag.
-                                            </video>
-                                        </div>
-
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Close</button>
-                                        </div>
+                                @empty
+                                    <tr>
+                                        <td colspan="9">No feedback videos available</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                        <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-sm" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="videoModalLabel">Video</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <video id="videoPlayer" controls class="w-100">
+                                            <source id="videoSource" src="" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
-
-
-
                 </div>
+                
             </div>
         </div>
     @endsection
@@ -574,17 +594,14 @@
             }
         </script>
 
-        <script>
-            setTimeout(function() {
-                var successMessage = document.getElementById('successMessage');
-                if (successMessage) {
-                    successMessage.style.display = 'none';
-                }
-
-                var errorMessage = document.getElementById('errorMessage');
-                if (errorMessage) {
-                    errorMessage.style.display = 'none';
-                }
-            }, 5000); // 5000ms = 5 seconds
-        </script>
+<script>
+    // Hide the alert after 5 seconds
+    setTimeout(function () {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            alert.classList.add('fade-out');
+            setTimeout(() => alert.remove(), 1000); // Remove the element after the fade-out
+        });
+    }, 5000);
+</script>
     @endsection

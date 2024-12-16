@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
  
 use App\Models\FeedbackVideo;
 use App\Models\BusinessUnit;
+use App\Models\FeedbackFollowUp;
+
 use Illuminate\Support\Facades\Storage;
  
 use App\Http\Controllers\Controller;
@@ -47,37 +49,38 @@ class AdminController extends Controller
     public function showDashboard(Request $request)
     {
         $business_id = Auth::guard('admins')->user()->business_id;
-   
+
         $query = FeedbackVideo::where('status', 'active')
             ->whereHas('businessUnit', function ($query) use ($business_id) {
                 $query->where('business_id', $business_id);
             })
-            ->with(['businessUnit.socialMedia']); // Include businessUnit and its socialMedia relationship
-   
+            ->with(['businessUnit.socialMedia', 'feedbackFollowUp']); // Load feedbackFollowUp here
+
+        // Filter by business unit
         if ($request->filled('business_unit_id') && $request->business_unit_id !== 'All') {
             $query->where('business_unit_id', $request->business_unit_id);
         }
-   
+
+        // Filter by date
         if ($request->filled('from_date')) {
             $fromDate = Carbon::parse($request->from_date)->startOfDay();
             $query->where('date', '>=', $fromDate);
         }
-   
         if ($request->filled('to_date')) {
             $toDate = Carbon::parse($request->to_date)->endOfDay();
             $query->where('date', '<=', $toDate);
         }
-   
-        $feedback_video = $query->get(['id', 'business_unit_id', 'feedback_video', 'date', 'time', 'rating', 'comments']); // Select necessary columns
-   
+
+        // Fetch video feedbacks
+        $feedback_video = $query->get();
+
+        // Fetch additional data
         $businessName = Auth::guard('admins')->user()->business_name ?? 'User';
-   
         $businessUnits = BusinessUnit::where('business_id', $business_id)->get();
-   
-        // Pass variables to the view
+
         return view('dash-board', compact('businessName', 'feedback_video', 'businessUnits'));
     }
-   
+    
     public function disableVideoFeedback($id)
 {
     $feedbackVideo = FeedbackVideo::findOrFail($id);
@@ -115,21 +118,26 @@ public function saveComment(Request $request, $videoId)
 {
     // Validate the comment input
     $request->validate([
-        'comments' => 'required|string|max:255', // You can change the validation as per your requirements
+        'comments' => 'required|string|max:255',
     ]);
- 
+
     // Find the feedback video by ID
     $feedbackVideo = FeedbackVideo::find($videoId);
- 
+
     if ($feedbackVideo) {
-        // Update the comment for the selected video
-        $feedbackVideo->comments = $request->comments;
-        $feedbackVideo->save();
- 
-        // Optionally, return a success response or redirect back with success message
-        return redirect()->back()->with('success', 'Comment saved successfully!');
+        // Save the follow-up comment in the FeedbackFollowUp table
+        FeedbackFollowUp::create([
+            'feedback_video_id' => $videoId, // Link to FeedbackVideo
+            'comments' => $request->comments,
+            'date' => Carbon::now('Asia/Kolkata')->toDateString(), // Current date in Kolkata timezone
+            'time' => Carbon::now('Asia/Kolkata')->toTimeString(), // Current time in Kolkata timezone
+        ]);
+
+
+        // Return a success response
+        return redirect()->back()->with('success', 'Comment and follow-up saved successfully!');
     }
- 
+
     // If video not found
     return redirect()->back()->with('error', 'Feedback video not found.');
 }

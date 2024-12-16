@@ -21,7 +21,6 @@ class FeedbackVideo extends Model
         'social_media_permission'
     ];
 
-    // FeedbackVideo Model
 public function businessUnit()
 {
     return $this->belongsTo(BusinessUnit::class, 'business_unit_id', 'business_unit_id');
@@ -32,5 +31,9 @@ public function socialMedia()
     return $this->hasMany(BusinessUnitSocialMedia::class, 'business_unit_id');
 }
 
+public function feedbackFollowUp()
+{
+    return $this->hasMany(FeedbackFollowUp::class, 'feedback_video_id', 'id');
+}
 
 }
