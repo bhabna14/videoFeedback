@@ -51,10 +51,17 @@ class AdminController extends Controller
         $business_id = Auth::guard('admins')->user()->business_id;
 
         $query = FeedbackVideo::where('status', 'active')
-            ->whereHas('businessUnit', function ($query) use ($business_id) {
-                $query->where('business_id', $business_id);
-            })
-            ->with(['businessUnit.socialMedia', 'feedbackFollowUp']); // Load feedbackFollowUp here
+        ->whereHas('businessUnit', function ($query) use ($business_id) {
+            $query->where('business_id', $business_id);
+        })
+
+        ->with([
+            'businessUnit.socialMedia',
+            'feedbackFollowUp' => function ($query) {
+                // Order follow-up notes by date and time in ascending order
+                $query->orderBy('date', 'desc')->orderBy('time', 'desc');
+            }
+        ]);
 
         // Filter by business unit
         if ($request->filled('business_unit_id') && $request->business_unit_id !== 'All') {
@@ -152,7 +159,4 @@ public function saveRating(Request $request, $videoId)
     return redirect()->back()->with('success', 'Rating saved successfully!');
 }
 
- 
-   
- 
 }

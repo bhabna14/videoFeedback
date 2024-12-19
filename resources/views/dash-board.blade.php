@@ -10,7 +10,6 @@
     <link href="{{ asset('assets/plugins/datatable/responsive.bootstrap5.css') }}" rel="stylesheet" />
 
     <style>
-
         .social-media-icon {
             font-size: 24px;
             margin-right: 10px;
@@ -45,50 +44,68 @@
         }
     </style>
     <style>
-        .chat-container {
-            max-height: 400px;
-            overflow-y: auto;
-            padding: 10px;
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-        }
-    
-        .chat-message {
-            display: flex;
-            flex-direction: column;
-            margin: 10px 0;
-            max-width: 60%;
-            padding: 10px;
-            border-radius: 12px;
-            color: #fff;
-            font-size: 14px;
+        /* Timeline Container */
+        .timeline {
+            border-left: 2px solid #007bff;
+            margin: 20px 0;
+            padding-left: 20px;
             position: relative;
         }
-    
-        .chat-left {
-            background: #f70258;
-            align-self: flex-start;
+
+        /* Individual Timeline Items */
+        .timeline-item {
+            margin-bottom: 20px;
+            position: relative;
+            text-align: left;
+            /* Align content to the left */
         }
-    
-        .chat-right {
-            background: #0407a3;
-            align-self: flex-end;
+
+        .timeline-item::before {
+            content: "";
+            background: #007bff;
+            border-radius: 50%;
+            height: 10px;
+            width: 10px;
+            position: absolute;
+            left: -14px;
+            top: 4px;
         }
-    
-        .chat-text {
-            margin: 0;
-            word-wrap: break-word;
+
+        /* Timeline Date */
+        .timeline-date {
+            color: #007bff;
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+            text-align: left;
+            /* Align the date to the left */
         }
-    
-        .chat-time {
-            font-size: 12px;
-            color: #ccc;
-            margin-top: 5px;
-            text-align: right;
+
+        /* Timeline Content */
+        .timeline-content {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 10px;
+            text-align: left;
+            /* Align the text inside to the left */
+        }
+
+        /* Responsive Styling for Smaller Screens */
+        @media (max-width: 576px) {
+            .timeline {
+                padding-left: 10px;
+            }
+
+            .timeline-item::before {
+                left: -10px;
+            }
+
+            .timeline-content {
+                padding: 8px;
+            }
         }
     </style>
-    
 @endsection
 
 @section('content')
@@ -227,90 +244,131 @@
                                         <td>{{ \Carbon\Carbon::parse($video->date)->format('d-m-Y') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($video->time)->format('h:i A') }}</td>
                                         <td>
-                                            <button class="btn btn-sm btn-warning" data-toggle="modal" data-target="#videoModal" onclick="openVideoModal('{{ asset('storage/' . $video->feedback_video) }}')">
+                                            <button class="btn btn-sm btn-warning" data-toggle="modal"
+                                                data-target="#videoModal"
+                                                onclick="openVideoModal('{{ asset('storage/' . $video->feedback_video) }}')">
                                                 View Video
                                             </button>
                                         </td>
                                         <td>
-                                            <form action="{{ route('admin.saveRating', $video->id) }}" method="POST" id="ratingForm{{ $video->id }}">
+                                            <form action="{{ route('admin.saveRating', $video->id) }}" method="POST"
+                                                id="ratingForm{{ $video->id }}">
                                                 @csrf
-                                                <button type="submit" name="rating" value="like" class="btn btn-sm {{ $video->rating == 'like' ? 'btn-success' : 'btn-light' }}" id="likeBtn{{ $video->id }}">
+                                                <button type="submit" name="rating" value="like"
+                                                    class="btn btn-sm {{ $video->rating == 'like' ? 'btn-success' : 'btn-light' }}"
+                                                    id="likeBtn{{ $video->id }}">
                                                     <i class="fa fa-thumbs-up"></i>
                                                 </button>
-                                                <button type="submit" name="rating" value="dislike" class="btn btn-sm {{ $video->rating == 'dislike' ? 'btn-danger' : 'btn-light' }}" id="dislikeBtn{{ $video->id }}">
+                                                <button type="submit" name="rating" value="dislike"
+                                                    class="btn btn-sm {{ $video->rating == 'dislike' ? 'btn-danger' : 'btn-light' }}"
+                                                    id="dislikeBtn{{ $video->id }}">
                                                     <i class="fa fa-thumbs-down"></i>
                                                 </button>
                                             </form>
                                         </td>
                                         <td>
-                                            <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#commentModal{{ $video->id }}">
+                                            <button class="btn btn-sm btn-primary" data-toggle="modal"
+                                                data-target="#commentModal{{ $video->id }}">
                                                 <i class="fa fa-edit"></i>
                                             </button>
-                                    
-                                            <button class="btn btn-sm" style="background-color: hsl(60, 94%, 49%)" data-toggle="modal" data-target="#showCommentModal{{ $video->id }}">
+
+                                            <button class="btn btn-sm" style="background-color: hsl(60, 94%, 49%)"
+                                                data-toggle="modal" data-target="#showCommentModal{{ $video->id }}">
                                                 <i class="fa fa-eye"></i>
                                             </button>
-                                    
+
                                             <!-- Add Comment Modal -->
-                                            <div class="modal fade" id="commentModal{{ $video->id }}" tabindex="-1" role="dialog">
+                                            <div class="modal fade" id="commentModal{{ $video->id }}" tabindex="-1"
+                                                role="dialog">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title">Add Comment for Video</h5>
-                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                            <button type="button" class="close"
+                                                                data-dismiss="modal">&times;</button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <form action="{{ route('admin.saveComment', $video->id) }}" method="POST">
+                                                            <form action="{{ route('admin.saveComment', $video->id) }}"
+                                                                method="POST">
                                                                 @csrf
                                                                 <div class="form-group">
                                                                     <textarea name="comments" class="form-control" rows="4" placeholder="Enter your comment"></textarea>
                                                                 </div>
-                                                                <button type="submit" class="btn btn-success">Save Comment</button>
+                                                                <button type="submit" class="btn btn-success">Save
+                                                                    Comment</button>
                                                             </form>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                    
+
                                             <!-- Show Comments Modal -->
-                                            <div class="modal fade" id="showCommentModal{{ $video->id }}" tabindex="-1" role="dialog">
+                                            <div class="modal fade" id="showCommentModal{{ $video->id }}"
+                                                tabindex="-1" role="dialog"
+                                                aria-labelledby="showCommentModalLabel-{{ $video->id }}"
+                                                aria-hidden="true">
                                                 <div class="modal-dialog modal-lg" role="document">
                                                     <div class="modal-content">
+                                                        <!-- Modal Header -->
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title">Comments for Video</h5>
-                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                            <h5 class="modal-title">Follow-Up Comments for Video</h5>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
+                                                        <!-- Modal Body -->
                                                         <div class="modal-body">
                                                             @if ($video->feedbackFollowUp && $video->feedbackFollowUp->isNotEmpty())
-                                                            <div class="chat-container">
-                                                                @foreach ($video->feedbackFollowUp as $key => $followUp)
-                                                                <div class="chat-message {{ $key % 2 == 0 ? 'chat-left' : 'chat-right' }}">
-                                                                    <p class="chat-text">{{ $followUp->comments }}</p>
-                                                                    <span class="chat-time">
-                                                                        {{ \Carbon\Carbon::parse($followUp->date)->format('d-m-Y') }} at 
-                                                                        {{ \Carbon\Carbon::parse($followUp->time)->format('h:i A') }}
-                                                                    </span>
+                                                                <div class="timeline">
+                                                                    @foreach ($video->feedbackFollowUp as $followUp)
+                                                                        <div class="timeline-item mb-3">
+                                                                            <!-- Date of the Note -->
+                                                                            <span class="timeline-date">
+                                                                                {{ \Carbon\Carbon::parse($followUp->date)->format('d M Y') }}
+                                                                                at
+                                                                                {{ \Carbon\Carbon::parse($followUp->time)->format('h:i A') }}
+                                                                            </span>
+                                                                            <!-- Note Content -->
+                                                                            <div
+                                                                                class="timeline-content border rounded p-3 bg-light">
+                                                                                <strong>Comments:</strong>
+                                                                                {{ $followUp->comments }}
+                                                                            </div>
+                                                                        </div>
+                                                                    @endforeach
                                                                 </div>
-                                                                @endforeach
-                                                            </div>
                                                             @else
-                                                            <p>No comments available for this video.</p>
+                                                                <p class="text-muted text-left">No follow-up comments
+                                                                    available for this video.</p>
                                                             @endif
+                                                        </div>
+                                                        <!-- Modal Footer -->
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Close</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+
+
                                         </td>
                                         <td>
-                                            <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#socialMediaModal{{ $video->id }}">
+                                            <button class="btn btn-sm btn-info" data-toggle="modal"
+                                                data-target="#socialMediaModal{{ $video->id }}">
                                                 <i class="fa fa-share-alt"></i>
                                             </button>
-                                            <div class="modal fade" id="socialMediaModal{{ $video->id }}" tabindex="-1" role="dialog" aria-labelledby="socialMediaModalLabel{{ $video->id }}" aria-hidden="true">
+                                            <div class="modal fade" id="socialMediaModal{{ $video->id }}"
+                                                tabindex="-1" role="dialog"
+                                                aria-labelledby="socialMediaModalLabel{{ $video->id }}"
+                                                aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="socialMediaModalLabel{{ $video->id }}">Social Media Links</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <h5 class="modal-title"
+                                                                id="socialMediaModalLabel{{ $video->id }}">Social Media
+                                                                Links</h5>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
@@ -318,290 +376,316 @@
                                                             @if ($video->social_media_permission === 'yes')
                                                                 <div class="d-flex flex-wrap justify-content-center">
                                                                     @foreach ($video->businessUnit->socialMedia as $socialMedia)
-                                                                        <a href="{{ $socialMedia->social_media_link }}" target="_blank" class="m-2">
+                                                                        <a href="{{ $socialMedia->social_media_link }}"
+                                                                            target="_blank" class="m-2">
                                                                             @switch(strtolower($socialMedia->social_media_name))
                                                                                 @case('facebook')
-                                                                                    <i class="fab fa-facebook" style="color: #3b5998; font-size: 36px;"></i>
-                                                                                    @break
+                                                                                    <i class="fab fa-facebook"
+                                                                                        style="color: #3b5998; font-size: 36px;"></i>
+                                                                                @break
+
                                                                                 @case('instagram')
-                                                                                    <i class="fab fa-instagram" style="color: #E4405F; font-size: 36px;"></i>
-                                                                                    @break
+                                                                                    <i class="fab fa-instagram"
+                                                                                        style="color: #E4405F; font-size: 36px;"></i>
+                                                                                @break
+
                                                                                 @case('twitter')
-                                                                                    <img src="{{ asset('assets/img/brand/twitter.png') }}" alt="Twitter" class="img-fluid social-logo me-2" style="width: 36px; height: 36px;">
-                                                                                    @break
+                                                                                    <img src="{{ asset('assets/img/brand/twitter.png') }}"
+                                                                                        alt="Twitter"
+                                                                                        class="img-fluid social-logo me-2"
+                                                                                        style="width: 36px; height: 36px;">
+                                                                                @break
+
                                                                                 @case('linkedin')
-                                                                                    <i class="fab fa-linkedin" style="color: #0077b5; font-size: 36px;"></i>
-                                                                                    @break
+                                                                                    <i class="fab fa-linkedin"
+                                                                                        style="color: #0077b5; font-size: 36px;"></i>
+                                                                                @break
+
                                                                                 @case('youtube')
-                                                                                    <i class="fab fa-youtube" style="color: #FF0000; font-size: 36px;"></i>
-                                                                                    @break
+                                                                                    <i class="fab fa-youtube"
+                                                                                        style="color: #FF0000; font-size: 36px;"></i>
+                                                                                @break
+
                                                                                 @case('website')
-                                                                                    <i class="fas fa-globe" style="color: #0d6efd; font-size: 36px;"></i>
-                                                                                    @break
+                                                                                    <i class="fas fa-globe"
+                                                                                        style="color: #0d6efd; font-size: 36px;"></i>
+                                                                                @break
+
                                                                                 @case('whatsapp')
-                                                                                    <i class="fab fa-whatsapp" style="color: #25D366; font-size: 36px;"></i>
-                                                                                    @break
+                                                                                    <i class="fab fa-whatsapp"
+                                                                                        style="color: #25D366; font-size: 36px;"></i>
+                                                                                @break
+
                                                                                 @default
-                                                                                    <i class="fas fa-globe" style="color: #6c757d; font-size: 36px;"></i>
+                                                                                    <i class="fas fa-globe"
+                                                                                        style="color: #6c757d; font-size: 36px;"></i>
                                                                             @endswitch
                                                                         </a>
                                                                     @endforeach
                                                                 </div>
                                                             @else
-                                                                <div class="alert alert-danger text-center">
-                                                                    <strong>Sharing on social media is not allowed for this video.</strong>
+                                                                <div class="text-danger text-center">
+                                                                    <strong>The user has requested not to share this in
+                                                                        social media</strong>
                                                                 </div>
                                                             @endif
                                                         </div>
-                                                        
+
                                                     </div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="d-flex justify-content-start">
-                                            <form action="{{ route('admin.disableVideoFeedback', $video->id) }}" method="POST" id="disabledForm{{ $video->id }}">
+                                            <form action="{{ route('admin.disableVideoFeedback', $video->id) }}"
+                                                method="POST" id="disabledForm{{ $video->id }}">
                                                 @csrf
-                                                <button type="button" class="btn btn-md btn-dark mr-2" onclick="confirmDisabled({{ $video->id }})">
+                                                <button type="button" class="btn btn-md btn-dark mr-2"
+                                                    onclick="confirmDisabled({{ $video->id }})">
                                                     <i class="fa fa-eye-slash"></i>
                                                 </button>
                                             </form>
-                                            <form action="{{ route('admin.deleteVideoFeedback', $video->id) }}" method="POST" id="deleteForm{{ $video->id }}">
+                                            <form action="{{ route('admin.deleteVideoFeedback', $video->id) }}"
+                                                method="POST" id="deleteForm{{ $video->id }}">
                                                 @csrf
-                                                <button type="button" class="btn btn-md btn-danger" style="margin-left: 5px" onclick="confirmDelete({{ $video->id }})">
+                                                <button type="button" class="btn btn-md btn-danger"
+                                                    style="margin-left: 5px"
+                                                    onclick="confirmDelete({{ $video->id }})">
                                                     <i class="fa fa-trash"></i>
                                                 </button>
                                             </form>
                                         </td>
                                     </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="9">No feedback videos available</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                        <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-sm" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="videoModalLabel">Video</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <video id="videoPlayer" controls class="w-100">
-                                            <source id="videoSource" src="" type="video/mp4">
-                                            Your browser does not support the video tag.
-                                        </video>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    @empty
+                                        <tr>
+                                            <td colspan="9">No feedback videos available</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                            <div class="modal fade" id="videoModal" tabindex="-1" role="dialog"
+                                aria-labelledby="videoModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-sm" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="videoModalLabel">Video</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <video id="videoPlayer" controls class="w-100">
+                                                <source id="videoSource" src="" type="video/mp4">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
-                
             </div>
-        </div>
-    @endsection
+        @endsection
 
-    @section('scripts')
-        <!-- Internal Chart.Bundle js-->
-        <script src="{{ asset('assets/plugins/chartjs/Chart.bundle.min.js') }}"></script>
+        @section('scripts')
+            <!-- Internal Chart.Bundle js-->
+            <script src="{{ asset('assets/plugins/chartjs/Chart.bundle.min.js') }}"></script>
 
-        <!-- Moment js -->
-        <script src="{{ asset('assets/plugins/raphael/raphael.min.js') }}"></script>
+            <!-- Moment js -->
+            <script src="{{ asset('assets/plugins/raphael/raphael.min.js') }}"></script>
 
-        <!-- INTERNAL Apexchart js -->
-        <script src="{{ asset('assets/js/apexcharts.js') }}"></script>
+            <!-- INTERNAL Apexchart js -->
+            <script src="{{ asset('assets/js/apexcharts.js') }}"></script>
 
-        <!--Internal Sparkline js -->
-        <script src="{{ asset('assets/plugins/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
+            <!--Internal Sparkline js -->
+            <script src="{{ asset('assets/plugins/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
 
-        <!--Internal  index js -->
-        <script src="{{ asset('assets/js/index.js') }}"></script>
+            <!--Internal  index js -->
+            <script src="{{ asset('assets/js/index.js') }}"></script>
 
-        <!-- Chart-circle js -->
-        <script src="{{ asset('assets/js/chart-circle.js') }}"></script>
+            <!-- Chart-circle js -->
+            <script src="{{ asset('assets/js/chart-circle.js') }}"></script>
 
-        <!-- Internal Data tables -->
-        <script src="{{ asset('assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
-        <script src="{{ asset('assets/plugins/datatable/js/dataTables.bootstrap5.js') }}"></script>
-        <script src="{{ asset('assets/plugins/datatable/dataTables.responsive.min.js') }}"></script>
-        <script src="{{ asset('assets/plugins/datatable/responsive.bootstrap5.min.js') }}"></script>
+            <!-- Internal Data tables -->
+            <script src="{{ asset('assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
+            <script src="{{ asset('assets/plugins/datatable/js/dataTables.bootstrap5.js') }}"></script>
+            <script src="{{ asset('assets/plugins/datatable/dataTables.responsive.min.js') }}"></script>
+            <script src="{{ asset('assets/plugins/datatable/responsive.bootstrap5.min.js') }}"></script>
 
-        <!-- INTERNAL Select2 js -->
-        <script src="{{ asset('assets/plugins/select2/js/select2.full.min.js') }}"></script>
-        <script src="{{ asset('assets/js/select2.js') }}"></script>
+            <!-- INTERNAL Select2 js -->
+            <script src="{{ asset('assets/plugins/select2/js/select2.full.min.js') }}"></script>
+            <script src="{{ asset('assets/js/select2.js') }}"></script>
 
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-        <script>
-            function confirmDisabled(id) {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You want to disable this video feedback!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, disable it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Submit the form to disable the video
-                        document.getElementById('disabledForm' + id).submit();
-                        Swal.fire('Disabled!', 'The video has been disabled.', 'success');
-                    }
-                });
-            }
-
-            function confirmDelete(id) {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You want to permanently delete this video feedback!",
-                    icon: 'danger',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Submit the form to delete the video
-                        document.getElementById('deleteForm' + id).submit();
-                        Swal.fire('Deleted!', 'The video has been deleted.', 'success');
-                    }
-                });
-            }
-        </script>
-
-
-        <!-- JavaScript to handle the button highlighting -->
-        <script>
-            function highlightButton(videoId, ratingType) {
-                // Clear all buttons for this video
-                const likeBtn = document.getElementById('likeBtn' + videoId);
-                const dislikeBtn = document.getElementById('dislikeBtn' + videoId);
-
-                if (ratingType === 'like') {
-                    likeBtn.classList.add('btn-success');
-                    likeBtn.classList.remove('btn-light');
-                    dislikeBtn.classList.add('btn-light');
-                    dislikeBtn.classList.remove('btn-danger');
-                } else {
-                    dislikeBtn.classList.add('btn-danger');
-                    dislikeBtn.classList.remove('btn-light');
-                    likeBtn.classList.add('btn-light');
-                    likeBtn.classList.remove('btn-success');
+            <script>
+                function confirmDisabled(id) {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You want to disable this video feedback!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, disable it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Submit the form to disable the video
+                            document.getElementById('disabledForm' + id).submit();
+                            Swal.fire('Disabled!', 'The video has been disabled.', 'success');
+                        }
+                    });
                 }
-            }
-        </script>
-        <script>
-            setTimeout(function() {
-                document.getElementById('Message').style.display = 'none';
-            }, 3000);
-            setTimeout(function() {
-                document.getElementById('Messages').style.display = 'none';
-            }, 3000);
-        </script>
 
-        <script>
-            // Function to open the modal and set the video source
-            function openVideoModal(videoUrl) {
-                var videoPlayer = document.getElementById('videoPlayer');
-                var videoSource = document.getElementById('videoSource');
+                function confirmDelete(id) {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You want to permanently delete this video feedback!",
+                        icon: 'danger',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Submit the form to delete the video
+                            document.getElementById('deleteForm' + id).submit();
+                            Swal.fire('Deleted!', 'The video has been deleted.', 'success');
+                        }
+                    });
+                }
+            </script>
 
-                // Set the video source URL (ensure it's correct and accessible)
-                videoSource.src = videoUrl;
-                videoPlayer.load(); // Load the new video into the player
 
-                // If the video doesn't load, show an error message
-                videoPlayer.onerror = function() {
-                    alert('Error loading video. Please try again.');
-                };
-            }
-        </script>
+            <!-- JavaScript to handle the button highlighting -->
+            <script>
+                function highlightButton(videoId, ratingType) {
+                    // Clear all buttons for this video
+                    const likeBtn = document.getElementById('likeBtn' + videoId);
+                    const dislikeBtn = document.getElementById('dislikeBtn' + videoId);
 
-        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    if (ratingType === 'like') {
+                        likeBtn.classList.add('btn-success');
+                        likeBtn.classList.remove('btn-light');
+                        dislikeBtn.classList.add('btn-light');
+                        dislikeBtn.classList.remove('btn-danger');
+                    } else {
+                        dislikeBtn.classList.add('btn-danger');
+                        dislikeBtn.classList.remove('btn-light');
+                        likeBtn.classList.add('btn-light');
+                        likeBtn.classList.remove('btn-success');
+                    }
+                }
+            </script>
+            <script>
+                setTimeout(function() {
+                    document.getElementById('Message').style.display = 'none';
+                }, 3000);
+                setTimeout(function() {
+                    document.getElementById('Messages').style.display = 'none';
+                }, 3000);
+            </script>
 
-        <!-- Bootstrap JS -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+            <script>
+                // Function to open the modal and set the video source
+                function openVideoModal(videoUrl) {
+                    var videoPlayer = document.getElementById('videoPlayer');
+                    var videoSource = document.getElementById('videoSource');
 
-        <script>
-            function saveRating(videoId, rating) {
-                let likeBtn = document.getElementById(`likeBtn${videoId}`);
-                let dislikeBtn = document.getElementById(`dislikeBtn${videoId}`);
+                    // Set the video source URL (ensure it's correct and accessible)
+                    videoSource.src = videoUrl;
+                    videoPlayer.load(); // Load the new video into the player
 
-                // Send AJAX request
-                fetch(`{{ url('admin/saveRating') }}/${videoId}`, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            rating: rating
+                    // If the video doesn't load, show an error message
+                    videoPlayer.onerror = function() {
+                        alert('Error loading video. Please try again.');
+                    };
+                }
+            </script>
+
+            <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+            <!-- Bootstrap JS -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+            <script>
+                function saveRating(videoId, rating) {
+                    let likeBtn = document.getElementById(`likeBtn${videoId}`);
+                    let dislikeBtn = document.getElementById(`dislikeBtn${videoId}`);
+
+                    // Send AJAX request
+                    fetch(`{{ url('admin/saveRating') }}/${videoId}`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                rating: rating
+                            })
                         })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Update button colors
-                            if (rating === 'like') {
-                                likeBtn.classList.add('btn-success');
-                                likeBtn.classList.remove('btn-light');
-                                dislikeBtn.classList.add('btn-light');
-                                dislikeBtn.classList.remove('btn-danger');
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Update button colors
+                                if (rating === 'like') {
+                                    likeBtn.classList.add('btn-success');
+                                    likeBtn.classList.remove('btn-light');
+                                    dislikeBtn.classList.add('btn-light');
+                                    dislikeBtn.classList.remove('btn-danger');
+                                } else {
+                                    dislikeBtn.classList.add('btn-danger');
+                                    dislikeBtn.classList.remove('btn-light');
+                                    likeBtn.classList.add('btn-light');
+                                    likeBtn.classList.remove('btn-success');
+                                }
                             } else {
-                                dislikeBtn.classList.add('btn-danger');
-                                dislikeBtn.classList.remove('btn-light');
-                                likeBtn.classList.add('btn-light');
-                                likeBtn.classList.remove('btn-success');
+                                alert('Error saving rating. Please try again.');
                             }
-                        } else {
-                            alert('Error saving rating. Please try again.');
-                        }
-                    });
-            }
+                        });
+                }
 
-            function saveComment(videoId) {
-                let commentInput = document.getElementById(`commentInput${videoId}`);
-                let commentValue = commentInput.value;
+                function saveComment(videoId) {
+                    let commentInput = document.getElementById(`commentInput${videoId}`);
+                    let commentValue = commentInput.value;
 
-                // Send AJAX request
-                fetch(`{{ url('admin/saveComment') }}/${videoId}`, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            comments: commentValue
+                    // Send AJAX request
+                    fetch(`{{ url('admin/saveComment') }}/${videoId}`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                comments: commentValue
+                            })
                         })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Comment saved successfully!');
-                            commentInput.value = data.comment; // Update input with saved comment
-                        } else {
-                            alert('Error saving comment. Please try again.');
-                        }
-                    });
-            }
-        </script>
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert('Comment saved successfully!');
+                                commentInput.value = data.comment; // Update input with saved comment
+                            } else {
+                                alert('Error saving comment. Please try again.');
+                            }
+                        });
+                }
+            </script>
 
-<script>
-    // Hide the alert after 5 seconds
-    setTimeout(function () {
-        const alerts = document.querySelectorAll('.alert');
-        alerts.forEach(alert => {
-            alert.classList.add('fade-out');
-            setTimeout(() => alert.remove(), 1000); // Remove the element after the fade-out
-        });
-    }, 5000);
-</script>
-    @endsection
+            <script>
+                // Hide the alert after 5 seconds
+                setTimeout(function() {
+                    const alerts = document.querySelectorAll('.alert');
+                    alerts.forEach(alert => {
+                        alert.classList.add('fade-out');
+                        setTimeout(() => alert.remove(), 1000); // Remove the element after the fade-out
+                    });
+                }, 5000);
+            </script>
+        @endsection
