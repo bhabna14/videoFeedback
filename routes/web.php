@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('admin')->group(function () {
     Route::get('/business-login', [AdminController::class, 'showLoginForm'])->name('admin.login');
     Route::post('/dash-board', [AdminController::class, 'login'])->name('admin.login.post');
-    Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
+    Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout');
     Route::post('/disable-video-feedback/{id}',[AdminController::class,'disableVideoFeedback'])->name('admin.disableVideoFeedback');
     Route::post('/delete-video-feedback/{id}',[AdminController::class,  'deleteVideoFeedback'])->name('admin.deleteVideoFeedback');
     Route::post('feedback-video/{videoId}/save-comment', [AdminController::class, 'saveComment'])->name('admin.saveComment');
